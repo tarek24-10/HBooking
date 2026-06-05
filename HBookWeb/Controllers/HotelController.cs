@@ -47,7 +47,7 @@ namespace HBookWeb.Controllers
             var hotel = _context.Hotels.FirstOrDefault(h => h.Id == HotelId);
             if (hotel == null)
             {
-                return NotFound();
+                return RedirectToAction("Error","Home");
             }
             return View(hotel);
         }
