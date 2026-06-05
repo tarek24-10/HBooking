@@ -58,6 +58,44 @@ namespace HBook.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Hotels");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedDate = new DateTime(2024, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Comfortable seaside rooms with modern amenities.",
+                            ImageUrl = "https://images.unsplash.com/photo-1501117716987-c8e79b4e59f3",
+                            ModifiedDate = new DateTime(2024, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "SeaView Resort",
+                            Occupancy = 2,
+                            Price = 199.99000000000001,
+                            Sqft = 420
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedDate = new DateTime(2024, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Cozy lodge located in the heart of the mountains.",
+                            ImageUrl = "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb",
+                            ModifiedDate = new DateTime(2024, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Mountain Lodge",
+                            Occupancy = 3,
+                            Price = 149.5,
+                            Sqft = 360
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedDate = new DateTime(2024, 4, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "Modern hotel in the city center close to attractions.",
+                            ImageUrl = "https://images.unsplash.com/photo-1505691723518-36a3ad12d0a6",
+                            ModifiedDate = new DateTime(2024, 4, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "City Central Hotel",
+                            Occupancy = 2,
+                            Price = 179.0,
+                            Sqft = 400
+                        });
                 });
 #pragma warning restore 612, 618
         }
