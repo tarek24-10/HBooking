@@ -17,5 +17,10 @@ namespace HBookWeb.Controllers
             var hotels = _context.Hotels.ToList();
             return View(hotels);
         }
+
+        public IActionResult Create()
+        {
+            return View();
+        }
     }
 }
