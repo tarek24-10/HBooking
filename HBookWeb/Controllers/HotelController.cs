@@ -28,6 +28,11 @@ namespace HBookWeb.Controllers
         [HttpPost]
         public IActionResult Create(Hotel hotel)
         {
+            if(hotel.Name == hotel.Description)
+            {
+                ModelState.AddModelError("", "The description cannot exactly match the name");
+            }
+
             if (ModelState.IsValid)
             {
                 _context.Hotels.Add(hotel);
