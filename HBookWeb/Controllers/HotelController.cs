@@ -41,5 +41,15 @@ namespace HBookWeb.Controllers
             }
             return View(hotel);
         }
+
+        public IActionResult Update(int HotelId)
+        {
+            var hotel = _context.Hotels.FirstOrDefault(h => h.Id == HotelId);
+            if (hotel == null)
+            {
+                return NotFound();
+            }
+            return View(hotel);
+        }
     }
 }
