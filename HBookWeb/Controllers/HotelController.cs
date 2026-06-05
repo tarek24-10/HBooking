@@ -51,5 +51,23 @@ namespace HBookWeb.Controllers
             }
             return View(hotel);
         }
+
+
+        [HttpPost]
+        public IActionResult Update(Hotel hotel)
+        {
+            if (hotel.Name == hotel.Description)
+            {
+                ModelState.AddModelError("", "The description cannot exactly match the name");
+            }
+
+            if (ModelState.IsValid & hotel.Id > 0)
+            {
+                _context.Hotels.Update(hotel);
+                _context.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View(hotel);
+        }
     }
 }
