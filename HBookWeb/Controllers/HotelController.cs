@@ -1,4 +1,5 @@
-﻿using HBook.Infrastructure.Data;
+﻿using HBook.Domain.Entities;
+using HBook.Infrastructure.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HBookWeb.Controllers
@@ -21,6 +22,19 @@ namespace HBookWeb.Controllers
         public IActionResult Create()
         {
             return View();
+        }
+
+
+        [HttpPost]
+        public IActionResult Create(Hotel hotel)
+        {
+            if (ModelState.IsValid)
+            {
+                _context.Hotels.Add(hotel);
+                _context.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View(hotel);
         }
     }
 }
