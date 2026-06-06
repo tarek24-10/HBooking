@@ -2,11 +2,13 @@
 using HBook.Domain.Entities;
 using HBook.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Text;
+using System.Linq;
 
 namespace HBook.Infrastructure.Repository
 {
@@ -34,7 +36,7 @@ namespace HBook.Infrastructure.Repository
 
             if (filter is not null)
             {
-                query.Where(filter);
+                query = query.Where(filter);
             }
 
             // Hotel, Case sensetive
@@ -42,7 +44,7 @@ namespace HBook.Infrastructure.Repository
             {
                 foreach (var includeprop in includeproperties.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries))
                 {
-                    query.Include(includeprop);
+                    query = query.Include(includeprop.Trim());
                 }
             }
 
@@ -55,14 +57,14 @@ namespace HBook.Infrastructure.Repository
 
             if(filter is not null)
             {
-                query.Where(filter);
+                query = query.Where(filter);
             }
 
             if(includeproperties is not null)
             {
                 foreach(var includeprop in includeproperties.Split(new char[] {','}, StringSplitOptions.RemoveEmptyEntries))
                 {
-                    query.Include(includeprop);
+                    query = query.Include(includeprop.Trim());
                 }
             }
 

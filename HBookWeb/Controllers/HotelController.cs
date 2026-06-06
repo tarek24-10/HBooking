@@ -1,4 +1,5 @@
-﻿using HBook.Domain.Entities;
+﻿using HBook.Application.Common.Interfaces;
+using HBook.Domain.Entities;
 using HBook.Infrastructure.Data;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,16 +7,16 @@ namespace HBookWeb.Controllers
 {
     public class HotelController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IHotelRepository hotelRepository;
 
-        public HotelController(ApplicationDbContext context)
+        public HotelController(IHotelRepository hotelRepository)
         {
-            _context = context;
+            this.hotelRepository = hotelRepository;
         }
 
         public IActionResult Index()
         {
-            var hotels = _context.Hotels.ToList();
+            var hotels = hotelRepository.GetAll();
             return View(hotels);
         }
 
@@ -35,8 +36,8 @@ namespace HBookWeb.Controllers
 
             if (ModelState.IsValid)
             {
-                _context.Hotels.Add(hotel);
-                _context.SaveChanges();
+                hotelRepository.Add(hotel);
+                hotelRepository.Save();
                 TempData["success"] = "The hotel Has been created successfully";
                 return RedirectToAction("Index");
             }
@@ -46,7 +47,7 @@ namespace HBookWeb.Controllers
 
         public IActionResult Update(int HotelId)
         {
-            var hotel = _context.Hotels.FirstOrDefault(h => h.Id == HotelId);
+            var hotel = hotelRepository.Get(h => h.Id == HotelId);
             if (hotel == null)
             {
                 return RedirectToAction("Error", "Home");
@@ -65,8 +66,8 @@ namespace HBookWeb.Controllers
 
             if (ModelState.IsValid & hotel.Id > 0)
             {
-                _context.Hotels.Update(hotel);
-                _context.SaveChanges();
+                hotelRepository.Update(hotel);
+                hotelRepository.Save();
                 TempData["success"] = "The hotel Has been updated successfully";
                 return RedirectToAction("Index");
             }
@@ -77,7 +78,7 @@ namespace HBookWeb.Controllers
 
         public IActionResult Delete(int HotelId)
         {
-            var hotel = _context.Hotels.FirstOrDefault(h => h.Id == HotelId);
+            var hotel = hotelRepository.Get(h => h.Id == HotelId);
             if (hotel == null)
             {
                 return RedirectToAction("Error", "Home");
@@ -89,11 +90,11 @@ namespace HBookWeb.Controllers
         [HttpPost]
         public IActionResult Delete(Hotel hotel)
         {
-            var objFromDb = _context.Hotels.FirstOrDefault(h => h.Id == hotel.Id);
+            var objFromDb = hotelRepository.Get(h => h.Id == hotel.Id);
             if (objFromDb is not null)
             {
-                _context.Hotels.Remove(objFromDb);
-                _context.SaveChanges();
+                hotelRepository.Delete(objFromDb);
+                hotelRepository.Save();
                 TempData["success"] = "The Hotel Has been deleted successfully";
                 return RedirectToAction("Index");
             }
