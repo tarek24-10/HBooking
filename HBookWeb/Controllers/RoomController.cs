@@ -18,6 +18,25 @@ namespace HBookWeb.Controllers
             return View(rooms);
         }
 
-        
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+
+        [HttpPost]
+        public IActionResult Create(Room room)
+        {
+            //ModelState.Remove("Hotel");
+            if (ModelState.IsValid)
+            {
+                _context.Rooms.Add(room);
+                _context.SaveChanges();
+                TempData["success"] = "The Room Has been created successfully";
+                return RedirectToAction("Index");
+            }
+            TempData["error"] = "The Room could not be created";
+            return View(room);
+        }
     }
 }
