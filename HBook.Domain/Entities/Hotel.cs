@@ -29,8 +29,9 @@ namespace HBook.Domain.Entities
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }
         [ValidateNever]
-        IEnumerable<Room> Rooms { get; set; }
+        public IEnumerable<Room> Rooms { get; set; }
         [ValidateNever]
-        IEnumerable<Amenity> Amenities { get; set; }
+        public IEnumerable<Amenity> Amenities { get; set; }
+        
     }
 }
