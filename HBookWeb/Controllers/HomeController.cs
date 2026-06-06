@@ -1,4 +1,6 @@
+using HBook.Application.Common.Interfaces;
 using HBookWeb.Models;
+using HBookWeb.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -6,9 +8,21 @@ namespace HBookWeb.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly IUnitOfWork _unitOfWork;
+        public HomeController(IUnitOfWork unitOfWork)
+        {
+            _unitOfWork = unitOfWork;
+        }
         public IActionResult Index()
         {
-            return View();
+            HomeVM homeVM = new HomeVM()
+            {
+                HotelList = _unitOfWork.Hotel.GetAll(),
+                CheckInDate = DateOnly.FromDateTime(DateTime.Now),
+                CheckOutDate = DateOnly.FromDateTime(DateTime.Now.AddDays(1)),
+                Nights = 1
+            };
+            return View(homeVM);
         }
 
         public IActionResult Privacy()
