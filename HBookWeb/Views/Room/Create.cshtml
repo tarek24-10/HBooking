@@ -13,7 +13,8 @@
             <div class="p-3">
                 <div asp-validation-summary="ModelOnly"></div>
                 <div class="form-floating py-1 col-12">
-                    <select asp-for="@Model.HotelId" asp-items="@ViewData["hotelList"] as IEnumerable<SelectListItem>" class="form-select border shadow">
+                    @* <select asp-for="@Model.HotelId" asp-items="@ViewData["hotelList"] as IEnumerable<SelectListItem>" class="form-select border shadow"> *@
+                    <select asp-for="@Model.HotelId" asp-items="@ViewBag.HotelList" class="form-select border shadow">
                         <option disabled selected>Select Hotel</option>
                     </select>
                     <label asp-for="Hotel" class="ms-2"></label>

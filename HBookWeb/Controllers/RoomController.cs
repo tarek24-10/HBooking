@@ -27,7 +27,8 @@ namespace HBookWeb.Controllers
                 Value = h.Id.ToString()
             });
 
-            ViewData["hotelList"] = hotelList;
+            //ViewData["hotelList"] = hotelList;
+            ViewBag.HotelList = hotelList;
             return View();
         }
 
