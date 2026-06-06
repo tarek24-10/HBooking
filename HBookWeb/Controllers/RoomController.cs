@@ -16,7 +16,7 @@ namespace HBookWeb.Controllers
         }
         public IActionResult Index()
         {
-            var rooms = _context.Rooms.ToList();
+            var rooms = _context.Rooms.Include("Hotel").ToList();
             return View(rooms);
         }
 
@@ -44,18 +44,36 @@ namespace HBookWeb.Controllers
 
 
         [HttpPost]
-        public IActionResult Create(Room room)
+        public IActionResult Create(RoomVM roomVM)
         {
+            bool isRoomNumderExist = _context.Rooms.Any(r => r.RoomNumber == roomVM.Room.RoomNumber && r.HotelId == roomVM.Room.HotelId);
             //ModelState.Remove("Hotel");
-            if (ModelState.IsValid)
+
+            if (ModelState.IsValid && !isRoomNumderExist)
             {
-                _context.Rooms.Add(room);
+                _context.Rooms.Add(roomVM.Room);
                 _context.SaveChanges();
                 TempData["success"] = "The Room Has been created successfully";
                 return RedirectToAction("Index");
             }
-            TempData["error"] = "The Room could not be created";
-            return View(room);
+
+            if (isRoomNumderExist)
+            {
+                TempData["error"] = "The Room is already exist";
+            }
+
+            if (!ModelState.IsValid)
+            {
+                TempData["error"] = "The Room could not be created";
+            }
+
+            roomVM.HotelList = _context.Hotels.Select(h => new SelectListItem
+            {
+                Text = h.Name,
+                Value = h.Id.ToString()
+            });
+
+            return View(roomVM);
         }
     }
 }

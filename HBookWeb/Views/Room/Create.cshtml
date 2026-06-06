@@ -15,21 +15,21 @@
                 <div asp-validation-summary="ModelOnly"></div>
                 <div class="form-floating py-1 col-12">
                     @* <select asp-for="@Model.HotelId" asp-items="@ViewData["hotelList"] as IEnumerable<SelectListItem>" class="form-select border shadow"> *@
-                    <select asp-for="@Model.HotelId" asp-items="@Model.HotelList" class="form-select border shadow">
+                    <select asp-for="@Model.Room.HotelId" asp-items="@Model.HotelList" class="form-select border shadow">
                         <option disabled selected>Select Hotel</option>
                     </select>
                     <label asp-for="HotelList" class="ms-2"></label>
-                    <span asp-validation-for="HotelId" class="text-danger"></span>
+                    <span asp-validation-for="Room.HotelId" class="text-danger"></span>
                 </div>
                 <div class="form-floating py-1 col-12">
-                    <input asp-for="RoomNumber" class="form-control border shadow" />
-                    <label asp-for="RoomNumber" class="ms-2"></label>
-                    <span asp-validation-for="RoomNumber" class="text-danger"></span>
+                    <input asp-for="Room.RoomNumber" class="form-control border shadow" />
+                    <label asp-for="Room.RoomNumber" class="ms-2"></label>
+                    <span asp-validation-for="Room.RoomNumber" class="text-danger"></span>
                 </div>
                 <div class="form-floating py-1 col-12">
-                    <input asp-for="SpecialDetails" class="form-control border shadow" />
-                    <label asp-for="SpecialDetails" class="ms-2"></label>
-                    <span asp-validation-for="SpecialDetails" class="text-danger"></span>
+                    <input asp-for="Room.SpecialDetails" class="form-control border shadow" />
+                    <label asp-for="Room.SpecialDetails" class="ms-2"></label>
+                    <span asp-validation-for="Room.SpecialDetails" class="text-danger"></span>
                 </div>
                 <div class="row pt-2">
                     <div class="col-6 col-md-3">
