@@ -47,7 +47,7 @@ namespace HBookWeb.Controllers
                     
                     hotel.Image.CopyTo(filestream);
 
-                    hotel.ImageUrl = @"images\Hotels" + fileName;
+                    hotel.ImageUrl = @"\images\Hotels\" + fileName;
 
                 }
                 else
@@ -84,6 +84,28 @@ namespace HBookWeb.Controllers
 
             if (ModelState.IsValid & hotel.Id > 0)
             {
+                if (hotel.Image != null)
+                {
+                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(hotel.Image.FileName);
+                    string imagePath = Path.Combine(_webHostEnvironment.WebRootPath, @"images\Hotels");
+
+                    if(!string.IsNullOrEmpty(hotel.ImageUrl))
+                    {
+                        var oldImagePath = Path.Combine(_webHostEnvironment.WebRootPath, @"images\Hotels", hotel.ImageUrl.TrimStart('\\'));
+                        if (System.IO.File.Exists(oldImagePath))
+                        {
+                            System.IO.File.Delete(oldImagePath);
+                        }
+                    }
+
+                    using var filestream = new FileStream(Path.Combine(imagePath, fileName), FileMode.Create);
+
+                    hotel.Image.CopyTo(filestream);
+
+                    hotel.ImageUrl = @"\images\Hotels\" + fileName;
+
+                }
+
                 _unitOfWork.Hotel.Update(hotel);
                 _unitOfWork.Save();
                 TempData["success"] = "The hotel Has been updated successfully";
@@ -111,6 +133,15 @@ namespace HBookWeb.Controllers
             var objFromDb = _unitOfWork.Hotel.Get(h => h.Id == hotel.Id);
             if (objFromDb is not null)
             {
+                if (!string.IsNullOrEmpty(objFromDb.ImageUrl))
+                {
+                        var oldImagePath = Path.Combine(_webHostEnvironment.WebRootPath, objFromDb.ImageUrl.TrimStart('\\'));
+                        if (System.IO.File.Exists(oldImagePath))
+                        {
+                            System.IO.File.Delete(oldImagePath);
+                        }
+                }
+
                 _unitOfWork.Hotel.Delete(objFromDb);
                 _unitOfWork.Save();
                 TempData["success"] = "The Hotel Has been deleted successfully";

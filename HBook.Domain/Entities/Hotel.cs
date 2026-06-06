@@ -21,7 +21,7 @@ namespace HBook.Domain.Entities
         public int Occupancy { get; set; }
 
         [NotMapped]
-        public IFormFile Image { get; set; }
+        public IFormFile? Image { get; set; }
 
         [Display(Name = "Image URL")]
         public string? ImageUrl { get; set; }

@@ -22,6 +22,54 @@ namespace HBook.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("HBook.Domain.Entities.Amenity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("HotelId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("HotelId");
+
+                    b.ToTable("Amenities");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Description = "High-speed wireless internet access",
+                            HotelId = 1,
+                            Name = "Free Wi-Fi"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Description = "Complimentary continental breakfast",
+                            HotelId = 2,
+                            Name = "Breakfast"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Description = "Free on-site parking",
+                            HotelId = 3,
+                            Name = "Parking"
+                        });
+                });
+
             modelBuilder.Entity("HBook.Domain.Entities.Hotel", b =>
                 {
                     b.Property<int>("Id")
@@ -144,6 +192,17 @@ namespace HBook.Infrastructure.Migrations
                             RoomNumber = 201,
                             SpecialDetails = "Mountain view, fireplace"
                         });
+                });
+
+            modelBuilder.Entity("HBook.Domain.Entities.Amenity", b =>
+                {
+                    b.HasOne("HBook.Domain.Entities.Hotel", "Hotel")
+                        .WithMany()
+                        .HasForeignKey("HotelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Hotel");
                 });
 
             modelBuilder.Entity("HBook.Domain.Entities.Room", b =>

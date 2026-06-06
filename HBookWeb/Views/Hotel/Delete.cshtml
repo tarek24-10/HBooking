@@ -11,7 +11,7 @@
     <div class="card-body border py-4">
         <form method="post" class="row">
             <input asp-for="Id" hidden />
-            <div class="p-3">
+            <div class="p-3 col-10">
                 <div asp-validation-summary="ModelOnly"></div>
                 <div class="form-floating py-1 col-12">
                     <input asp-for="Name" class="form-control border shadow" disabled />
@@ -50,6 +50,9 @@
                         </a>
                     </div>
                 </div>
+            </div>
+            <div class="col-2">
+                <image src="@Model.ImageUrl" width="100%" style="border-radius:5px; border:1px solid #bbb9b9;"></image>
             </div>
         </form>
     </div>

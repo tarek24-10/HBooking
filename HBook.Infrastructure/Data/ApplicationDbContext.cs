@@ -15,6 +15,7 @@ namespace HBook.Infrastructure.Data
 
         public DbSet<Hotel> Hotels { get; set; }
         public DbSet<Room> Rooms { get; set; }
+        public DbSet<Amenity> Amenities { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -81,6 +82,13 @@ namespace HBook.Infrastructure.Data
                     HotelId = 2,
                     SpecialDetails = "Mountain view, fireplace"
                 }
+            );
+
+            // Seed Amenity data
+            modelBuilder.Entity<Amenity>().HasData(
+                new Amenity { Id = 1, Name = "Free Wi-Fi", Description = "High-speed wireless internet access", HotelId = 1 },
+                new Amenity { Id = 2, Name = "Breakfast", Description = "Complimentary continental breakfast", HotelId = 2 },
+                new Amenity { Id = 3, Name = "Parking", Description = "Free on-site parking", HotelId = 3 }
             );
 
         }
