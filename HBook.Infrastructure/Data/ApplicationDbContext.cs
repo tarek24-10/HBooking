@@ -14,6 +14,7 @@ namespace HBook.Infrastructure.Data
         }
 
         public DbSet<Hotel> Hotels { get; set; }
+        public DbSet<Room> Rooms { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -57,6 +58,30 @@ namespace HBook.Infrastructure.Data
                     ModifiedDate = new DateTime(2024, 04, 20)
                 }
             );
+
+            modelBuilder.Entity<Room>().HasKey(r => new { r.HotelId, r.RoomNumber });
+
+            modelBuilder.Entity<Room>().HasData(
+                new Room
+                {
+                    RoomNumber = 101,
+                    HotelId = 1,
+                    SpecialDetails = "Sea view, king bed"
+                },
+                new Room
+                {
+                    RoomNumber = 102,
+                    HotelId = 1,
+                    SpecialDetails = "Balcony, double bed"
+                },
+                new Room
+                {
+                    RoomNumber = 201,
+                    HotelId = 2,
+                    SpecialDetails = "Mountain view, fireplace"
+                }
+            );
+
         }
     }
 }

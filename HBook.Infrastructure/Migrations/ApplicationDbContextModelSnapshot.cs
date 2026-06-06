@@ -44,7 +44,8 @@ namespace HBook.Infrastructure.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<int>("Occupancy")
                         .HasColumnType("int");
@@ -96,6 +97,53 @@ namespace HBook.Infrastructure.Migrations
                             Price = 179.0,
                             Sqft = 400
                         });
+                });
+
+            modelBuilder.Entity("HBook.Domain.Entities.Room", b =>
+                {
+                    b.Property<int>("HotelId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RoomNumber")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SpecialDetails")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("HotelId", "RoomNumber");
+
+                    b.ToTable("Rooms");
+
+                    b.HasData(
+                        new
+                        {
+                            HotelId = 1,
+                            RoomNumber = 101,
+                            SpecialDetails = "Sea view, king bed"
+                        },
+                        new
+                        {
+                            HotelId = 1,
+                            RoomNumber = 102,
+                            SpecialDetails = "Balcony, double bed"
+                        },
+                        new
+                        {
+                            HotelId = 2,
+                            RoomNumber = 201,
+                            SpecialDetails = "Mountain view, fireplace"
+                        });
+                });
+
+            modelBuilder.Entity("HBook.Domain.Entities.Room", b =>
+                {
+                    b.HasOne("HBook.Domain.Entities.Hotel", "Hotel")
+                        .WithMany()
+                        .HasForeignKey("HotelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Hotel");
                 });
 #pragma warning restore 612, 618
         }
