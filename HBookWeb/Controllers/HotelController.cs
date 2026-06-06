@@ -8,10 +8,12 @@ namespace HBookWeb.Controllers
     public class HotelController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
+        IWebHostEnvironment _webHostEnvironment;
 
-        public HotelController(IUnitOfWork unitOfWork)
+        public HotelController(IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment)
         {
             _unitOfWork = unitOfWork;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         public IActionResult Index()
@@ -36,6 +38,22 @@ namespace HBookWeb.Controllers
 
             if (ModelState.IsValid)
             {
+                if(hotel.Image != null)
+                {
+                    string fileName = Guid.NewGuid().ToString() + Path.GetExtension(hotel.Image.FileName);
+                    string imagePath = Path.Combine(_webHostEnvironment.WebRootPath, @"images\Hotels");
+
+                    using var filestream = new FileStream(Path.Combine(imagePath, fileName), FileMode.Create);
+                    
+                    hotel.Image.CopyTo(filestream);
+
+                    hotel.ImageUrl = @"images\Hotels" + fileName;
+
+                }
+                else
+                {
+                    hotel.ImageUrl = "https://placehold.co/600x400";
+                }
                 _unitOfWork.Hotel.Add(hotel);
                 _unitOfWork.Save();
                 TempData["success"] = "The hotel Has been created successfully";
