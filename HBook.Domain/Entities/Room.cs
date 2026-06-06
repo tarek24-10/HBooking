@@ -9,6 +9,8 @@ namespace HBook.Domain.Entities
 {
     public class Room
     {
+        public int Id { get; set; }
+
         [Display(Name = "Room Number")]
         public int RoomNumber { get; set; }
         [ForeignKey("Hotel")]

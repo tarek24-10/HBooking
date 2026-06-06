@@ -59,23 +59,24 @@ namespace HBook.Infrastructure.Data
                 }
             );
 
-            modelBuilder.Entity<Room>().HasKey(r => new { r.HotelId, r.RoomNumber });
-
             modelBuilder.Entity<Room>().HasData(
                 new Room
                 {
+                    Id = 1,
                     RoomNumber = 101,
                     HotelId = 1,
                     SpecialDetails = "Sea view, king bed"
                 },
                 new Room
                 {
+                    Id = 2,
                     RoomNumber = 102,
                     HotelId = 1,
                     SpecialDetails = "Balcony, double bed"
                 },
                 new Room
                 {
+                    Id = 3,
                     RoomNumber = 201,
                     HotelId = 2,
                     SpecialDetails = "Mountain view, fireplace"

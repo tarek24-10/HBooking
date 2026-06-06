@@ -101,6 +101,12 @@ namespace HBook.Infrastructure.Migrations
 
             modelBuilder.Entity("HBook.Domain.Entities.Room", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
                     b.Property<int>("HotelId")
                         .HasColumnType("int");
 
@@ -110,25 +116,30 @@ namespace HBook.Infrastructure.Migrations
                     b.Property<string>("SpecialDetails")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("HotelId", "RoomNumber");
+                    b.HasKey("Id");
+
+                    b.HasIndex("HotelId");
 
                     b.ToTable("Rooms");
 
                     b.HasData(
                         new
                         {
+                            Id = 1,
                             HotelId = 1,
                             RoomNumber = 101,
                             SpecialDetails = "Sea view, king bed"
                         },
                         new
                         {
+                            Id = 2,
                             HotelId = 1,
                             RoomNumber = 102,
                             SpecialDetails = "Balcony, double bed"
                         },
                         new
                         {
+                            Id = 3,
                             HotelId = 2,
                             RoomNumber = 201,
                             SpecialDetails = "Mountain view, fireplace"

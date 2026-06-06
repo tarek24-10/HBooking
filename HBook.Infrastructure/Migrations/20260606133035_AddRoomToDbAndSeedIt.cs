@@ -25,13 +25,15 @@ namespace HBook.Infrastructure.Migrations
                 name: "Rooms",
                 columns: table => new
                 {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     RoomNumber = table.Column<int>(type: "int", nullable: false),
                     HotelId = table.Column<int>(type: "int", nullable: false),
                     SpecialDetails = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Rooms", x => new { x.HotelId, x.RoomNumber });
+                    table.PrimaryKey("PK_Rooms", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Rooms_Hotels_HotelId",
                         column: x => x.HotelId,
@@ -42,13 +44,18 @@ namespace HBook.Infrastructure.Migrations
 
             migrationBuilder.InsertData(
                 table: "Rooms",
-                columns: new[] { "HotelId", "RoomNumber", "SpecialDetails" },
+                columns: new[] { "Id", "HotelId", "RoomNumber", "SpecialDetails" },
                 values: new object[,]
                 {
-                    { 1, 101, "Sea view, king bed" },
-                    { 1, 102, "Balcony, double bed" },
-                    { 2, 201, "Mountain view, fireplace" }
+                    { 1, 1, 101, "Sea view, king bed" },
+                    { 2, 1, 102, "Balcony, double bed" },
+                    { 3, 2, 201, "Mountain view, fireplace" }
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Rooms_HotelId",
+                table: "Rooms",
+                column: "HotelId");
         }
 
         /// <inheritdoc />

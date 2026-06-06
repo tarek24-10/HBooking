@@ -75,5 +75,51 @@ namespace HBookWeb.Controllers
 
             return View(roomVM);
         }
+
+        public IActionResult Update(int Id)
+        {
+            // EF Core Find requires key values in the same order as the entity key definition
+            // The Room composite key is configured as (HotelId, RoomNumber) so pass keys in that order.
+            RoomVM roomVM = new()
+            {
+                Room = _context.Rooms.Find(id),
+                HotelList = _context.Hotels.Select(h => new SelectListItem
+                {
+                    Text = h.Name,
+                    Value = h.Id.ToString()
+                })
+            };
+
+            if (roomVM.Room == null)
+            {
+                return RedirectToAction("Error", "Home");
+            }
+            return View(roomVM);
+        }
+
+
+        [HttpPost]
+        public IActionResult Update(RoomVM roomVM)
+        {
+
+            if (ModelState.IsValid)
+            {
+                _context.Rooms.Update(roomVM.Room);
+                _context.SaveChanges();
+                TempData["success"] = "The Room Has been updated successfully";
+                return RedirectToAction("Index");
+            }
+
+
+            TempData["error"] = "The Room could not be created";
+
+            roomVM.HotelList = _context.Hotels.Select(h => new SelectListItem
+            {
+                Text = h.Name,
+                Value = h.Id.ToString()
+            });
+
+            return View(roomVM);
+        }
     }
 }
