@@ -7,16 +7,16 @@ namespace HBookWeb.Controllers
 {
     public class HotelController : Controller
     {
-        private readonly IHotelRepository hotelRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public HotelController(IHotelRepository hotelRepository)
+        public HotelController(IUnitOfWork unitOfWork)
         {
-            this.hotelRepository = hotelRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public IActionResult Index()
         {
-            var hotels = hotelRepository.GetAll();
+            var hotels = _unitOfWork.Hotel.GetAll();
             return View(hotels);
         }
 
@@ -36,8 +36,8 @@ namespace HBookWeb.Controllers
 
             if (ModelState.IsValid)
             {
-                hotelRepository.Add(hotel);
-                hotelRepository.Save();
+                _unitOfWork.Hotel.Add(hotel);
+                _unitOfWork.Save();
                 TempData["success"] = "The hotel Has been created successfully";
                 return RedirectToAction("Index");
             }
@@ -47,7 +47,7 @@ namespace HBookWeb.Controllers
 
         public IActionResult Update(int HotelId)
         {
-            var hotel = hotelRepository.Get(h => h.Id == HotelId);
+            var hotel = _unitOfWork.Hotel.Get(h => h.Id == HotelId);
             if (hotel == null)
             {
                 return RedirectToAction("Error", "Home");
@@ -66,8 +66,8 @@ namespace HBookWeb.Controllers
 
             if (ModelState.IsValid & hotel.Id > 0)
             {
-                hotelRepository.Update(hotel);
-                hotelRepository.Save();
+                _unitOfWork.Hotel.Update(hotel);
+                _unitOfWork.Save();
                 TempData["success"] = "The hotel Has been updated successfully";
                 return RedirectToAction("Index");
             }
@@ -78,7 +78,7 @@ namespace HBookWeb.Controllers
 
         public IActionResult Delete(int HotelId)
         {
-            var hotel = hotelRepository.Get(h => h.Id == HotelId);
+            var hotel = _unitOfWork.Hotel.Get(h => h.Id == HotelId);
             if (hotel == null)
             {
                 return RedirectToAction("Error", "Home");
@@ -90,11 +90,11 @@ namespace HBookWeb.Controllers
         [HttpPost]
         public IActionResult Delete(Hotel hotel)
         {
-            var objFromDb = hotelRepository.Get(h => h.Id == hotel.Id);
+            var objFromDb = _unitOfWork.Hotel.Get(h => h.Id == hotel.Id);
             if (objFromDb is not null)
             {
-                hotelRepository.Delete(objFromDb);
-                hotelRepository.Save();
+                _unitOfWork.Hotel.Delete(objFromDb);
+                _unitOfWork.Save();
                 TempData["success"] = "The Hotel Has been deleted successfully";
                 return RedirectToAction("Index");
             }

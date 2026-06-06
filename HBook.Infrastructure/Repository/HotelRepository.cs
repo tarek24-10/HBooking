@@ -71,10 +71,6 @@ namespace HBook.Infrastructure.Repository
         //    return query.ToList();
         //}
 
-        public void Save()
-        {
-            _context.SaveChanges();
-        }
 
         public void Update(Hotel entity)
         {

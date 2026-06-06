@@ -13,6 +13,5 @@ namespace HBook.Application.Common.Interfaces
         //void Add(Hotel entity);
         void Update(Hotel entity);
         //void Delete(Hotel entity);
-        void Save();
     }
 }
