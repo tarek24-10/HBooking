@@ -1,5 +1,6 @@
 ﻿using HBook.Domain.Entities;
 using HBook.Infrastructure.Data;
+using HBookWeb.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -21,15 +22,24 @@ namespace HBookWeb.Controllers
 
         public IActionResult Create()
         {
-            IEnumerable<SelectListItem> hotelList = _context.Hotels.Select(h => new SelectListItem
+            RoomVM roomVM = new RoomVM()
             {
-                Text = h.Name,
-                Value = h.Id.ToString()
-            });
+                HotelList = _context.Hotels.Select(h => new SelectListItem
+                {
+                    Text = h.Name,
+                    Value = h.Id.ToString()
+                })
+            };
+
+            //IEnumerable<SelectListItem> hotelList = _context.Hotels.Select(h => new SelectListItem
+            //{
+            //    Text = h.Name,
+            //    Value = h.Id.ToString()
+            //});
 
             //ViewData["hotelList"] = hotelList;
-            ViewBag.HotelList = hotelList;
-            return View();
+            //ViewBag.HotelList = hotelList;
+            return View(roomVM);
         }
 
 
