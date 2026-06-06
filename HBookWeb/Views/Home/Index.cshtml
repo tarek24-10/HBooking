@@ -115,7 +115,7 @@
                             </div>
                             <div class="modal-body m-0">
                                 
-                                    <div class="row">
+                                    @* <div class="row">
                                         <div class="col-12 col-md-5">
                                             <img src="@hotel.ImageUrl" style="border-radius:10px;" width="100%" />
                                         </div>
@@ -150,7 +150,8 @@
                                                 </span>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> *@
+                                    <partial name="_HotelDetails" model="hotel"></partial>
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Close</button>
