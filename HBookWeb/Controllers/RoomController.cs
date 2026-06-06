@@ -1,6 +1,7 @@
 ﻿using HBook.Domain.Entities;
 using HBook.Infrastructure.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace HBookWeb.Controllers
@@ -20,6 +21,13 @@ namespace HBookWeb.Controllers
 
         public IActionResult Create()
         {
+            IEnumerable<SelectListItem> hotelList = _context.Hotels.Select(h => new SelectListItem
+            {
+                Text = h.Name,
+                Value = h.Id.ToString()
+            });
+
+            ViewData["hotelList"] = hotelList;
             return View();
         }
 

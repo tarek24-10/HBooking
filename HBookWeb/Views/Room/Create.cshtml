@@ -13,14 +13,16 @@
             <div class="p-3">
                 <div asp-validation-summary="ModelOnly"></div>
                 <div class="form-floating py-1 col-12">
+                    <select asp-for="@Model.HotelId" asp-items="@ViewData["hotelList"] as IEnumerable<SelectListItem>" class="form-select border shadow">
+                        <option disabled selected>Select Hotel</option>
+                    </select>
+                    <label asp-for="Hotel" class="ms-2"></label>
+                    <span asp-validation-for="HotelId" class="text-danger"></span>
+                </div>
+                <div class="form-floating py-1 col-12">
                     <input asp-for="RoomNumber" class="form-control border shadow" />
                     <label asp-for="RoomNumber" class="ms-2"></label>
                     <span asp-validation-for="RoomNumber" class="text-danger"></span>
-                </div>
-                <div class="form-floating py-1 col-12">
-                    <input asp-for="HotelId" class="form-control border shadow" />
-                    <label asp-for="HotelId" class="ms-2"></label>
-                    <span asp-validation-for="HotelId" class="text-danger"></span>
                 </div>
                 <div class="form-floating py-1 col-12">
                     <input asp-for="SpecialDetails" class="form-control border shadow" />
