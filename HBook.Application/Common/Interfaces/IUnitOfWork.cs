@@ -7,6 +7,7 @@ namespace HBook.Application.Common.Interfaces
     public interface IUnitOfWork
     {
         IHotelRepository Hotel { get; }
-         void Save();
+        IRoomRepository Room { get; }
+        void Save();
     }
 }

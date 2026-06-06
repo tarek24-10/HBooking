@@ -9,11 +9,15 @@ namespace HBook.Infrastructure.Repository
     public class UnitOfWork : IUnitOfWork
     {
         public IHotelRepository Hotel { get; private set; }
+
+        public IRoomRepository Room { get; private set; }
+
         private readonly ApplicationDbContext _context;
 
         public UnitOfWork(ApplicationDbContext context)
         {
             Hotel = new HotelRepository(context);
+            Room = new RoomRepository(context);
             _context = context;
         }
 

@@ -1,4 +1,5 @@
-﻿using HBook.Domain.Entities;
+﻿using HBook.Application.Common.Interfaces;
+using HBook.Domain.Entities;
 using HBook.Infrastructure.Data;
 using HBookWeb.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -9,14 +10,16 @@ namespace HBookWeb.Controllers
 {
     public class RoomController : Controller
     {
-        private readonly ApplicationDbContext _context;
-        public RoomController(ApplicationDbContext context) 
+        private readonly IUnitOfWork _unitOfWork;
+
+        public RoomController(IUnitOfWork unitOfWork)
         {
-            _context = context;
+            _unitOfWork = unitOfWork;
         }
+
         public IActionResult Index()
         {
-            var rooms = _context.Rooms.Include("Hotel").ToList();
+            var rooms = _unitOfWork.Room.GetAll(includeproperties: "Hotel");
             return View(rooms);
         }
 
@@ -24,7 +27,7 @@ namespace HBookWeb.Controllers
         {
             RoomVM roomVM = new RoomVM()
             {
-                HotelList = _context.Hotels.Select(h => new SelectListItem
+                HotelList = _unitOfWork.Hotel.GetAll().Select(h => new SelectListItem
                 {
                     Text = h.Name,
                     Value = h.Id.ToString()
@@ -46,13 +49,13 @@ namespace HBookWeb.Controllers
         [HttpPost]
         public IActionResult Create(RoomVM roomVM)
         {
-            bool isRoomNumderExist = _context.Rooms.Any(r => r.RoomNumber == roomVM.Room.RoomNumber && r.HotelId == roomVM.Room.HotelId);
+            bool isRoomNumderExist = _unitOfWork.Room.Any(r => r.RoomNumber == roomVM.Room.RoomNumber && r.HotelId == roomVM.Room.HotelId);
             //ModelState.Remove("Hotel");
 
             if (ModelState.IsValid && !isRoomNumderExist)
             {
-                _context.Rooms.Add(roomVM.Room);
-                _context.SaveChanges();
+                _unitOfWork.Room.Add(roomVM.Room);
+                _unitOfWork.Save();
                 TempData["success"] = "The Room Has been created successfully";
                 return RedirectToAction("Index");
             }
@@ -67,7 +70,7 @@ namespace HBookWeb.Controllers
                 TempData["error"] = "The Room could not be created";
             }
 
-            roomVM.HotelList = _context.Hotels.Select(h => new SelectListItem
+            roomVM.HotelList = _unitOfWork.Hotel.GetAll().Select(h => new SelectListItem
             {
                 Text = h.Name,
                 Value = h.Id.ToString()
@@ -82,8 +85,8 @@ namespace HBookWeb.Controllers
             // The Room composite key is configured as (HotelId, RoomNumber) so pass keys in that order.
             RoomVM roomVM = new()
             {
-                Room = _context.Rooms.Find(Id),
-                HotelList = _context.Hotels.Select(h => new SelectListItem
+                Room = _unitOfWork.Room.Get(r => r.Id == Id),
+                HotelList = _unitOfWork.Hotel.GetAll().Select(h => new SelectListItem
                 {
                     Text = h.Name,
                     Value = h.Id.ToString()
@@ -104,8 +107,8 @@ namespace HBookWeb.Controllers
 
             if (ModelState.IsValid)
             {
-                _context.Rooms.Update(roomVM.Room);
-                _context.SaveChanges();
+                _unitOfWork.Room.Update(roomVM.Room);
+                _unitOfWork.Save();
                 TempData["success"] = "The Room Has been updated successfully";
                 return RedirectToAction("Index");
             }
@@ -113,7 +116,7 @@ namespace HBookWeb.Controllers
 
             TempData["error"] = "The Room could not be created";
 
-            roomVM.HotelList = _context.Hotels.Select(h => new SelectListItem
+            roomVM.HotelList = _unitOfWork.Hotel.GetAll().Select(h => new SelectListItem
             {
                 Text = h.Name,
                 Value = h.Id.ToString()
@@ -126,8 +129,8 @@ namespace HBookWeb.Controllers
         {
             RoomVM roomVM = new()
             {
-                Room = _context.Rooms.Find(Id),
-                HotelList = _context.Hotels.Select(h => new SelectListItem
+                Room = _unitOfWork.Room.Get(r => r.Id == Id),
+                HotelList = _unitOfWork.Hotel.GetAll().Select(h => new SelectListItem
                 {
                     Text = h.Name,
                     Value = h.Id.ToString()
@@ -145,19 +148,19 @@ namespace HBookWeb.Controllers
         [HttpPost]
         public IActionResult Delete(RoomVM roomVM)
         {
-            var objFromDB = _context.Rooms.Find(roomVM.Room.Id);
+            var objFromDB = _unitOfWork.Room.Get(r => r.Id == roomVM.Room.Id);
             if (objFromDB is not null)
             {
-                _context.Rooms.Remove(objFromDB);
-                _context.SaveChanges();
+                _unitOfWork.Room.Delete(objFromDB);
+                _unitOfWork.Save();
                 TempData["success"] = "The Room Has been deleted successfully";
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index");
             }
 
 
             TempData["error"] = "The Room could not be deleted";
 
-            return View();
+            return View(roomVM);
         }
     }
 }
