@@ -8,6 +8,8 @@ namespace HBook.Application.Common.Interfaces
     {
         IHotelRepository Hotel { get; }
         IRoomRepository Room { get; }
+
+        IAmenityRepository Amenity { get; }
         void Save();
     }
 }

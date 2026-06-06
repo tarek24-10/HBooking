@@ -11,6 +11,7 @@ namespace HBook.Infrastructure.Repository
         public IHotelRepository Hotel { get; private set; }
 
         public IRoomRepository Room { get; private set; }
+        public IAmenityRepository Amenity { get; private set; }
 
         private readonly ApplicationDbContext _context;
 
@@ -18,6 +19,7 @@ namespace HBook.Infrastructure.Repository
         {
             Hotel = new HotelRepository(context);
             Room = new RoomRepository(context);
+            Amenity = new AmenityRepository(context);
             _context = context;
         }
 
