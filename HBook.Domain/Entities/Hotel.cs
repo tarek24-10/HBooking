@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -27,5 +28,9 @@ namespace HBook.Domain.Entities
         public string? ImageUrl { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime ModifiedDate { get; set; }
+        [ValidateNever]
+        IEnumerable<Room> Rooms { get; set; }
+        [ValidateNever]
+        IEnumerable<Amenity> Amenities { get; set; }
     }
 }

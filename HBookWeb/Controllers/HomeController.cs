@@ -17,7 +17,7 @@ namespace HBookWeb.Controllers
         {
             HomeVM homeVM = new HomeVM()
             {
-                HotelList = _unitOfWork.Hotel.GetAll(),
+                HotelList = _unitOfWork.Hotel.GetAll(includeproperties: "Amenities"),
                 CheckInDate = DateOnly.FromDateTime(DateTime.Now),
                 CheckOutDate = DateOnly.FromDateTime(DateTime.Now.AddDays(1)),
                 Nights = 1
