@@ -82,7 +82,7 @@ namespace HBookWeb.Controllers
             // The Room composite key is configured as (HotelId, RoomNumber) so pass keys in that order.
             RoomVM roomVM = new()
             {
-                Room = _context.Rooms.Find(id),
+                Room = _context.Rooms.Find(Id),
                 HotelList = _context.Hotels.Select(h => new SelectListItem
                 {
                     Text = h.Name,
@@ -120,6 +120,44 @@ namespace HBookWeb.Controllers
             });
 
             return View(roomVM);
+        }
+
+        public IActionResult Delete(int Id)
+        {
+            RoomVM roomVM = new()
+            {
+                Room = _context.Rooms.Find(Id),
+                HotelList = _context.Hotels.Select(h => new SelectListItem
+                {
+                    Text = h.Name,
+                    Value = h.Id.ToString()
+                })
+            };
+
+            if (roomVM.Room == null)
+            {
+                return RedirectToAction("Error", "Home");
+            }
+            return View(roomVM);
+        }
+
+
+        [HttpPost]
+        public IActionResult Delete(RoomVM roomVM)
+        {
+            var objFromDB = _context.Rooms.Find(roomVM.Room.Id);
+            if (objFromDB is not null)
+            {
+                _context.Rooms.Remove(objFromDB);
+                _context.SaveChanges();
+                TempData["success"] = "The Room Has been deleted successfully";
+                return RedirectToAction(nameof(Index));
+            }
+
+
+            TempData["error"] = "The Room could not be deleted";
+
+            return View();
         }
     }
 }
