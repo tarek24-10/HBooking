@@ -22,6 +22,10 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 //    options.AccessDeniedPath = "/Account/AccessDenied";
 //});
 
+builder.Services.Configure<IdentityOptions>(options =>
+options.Password.RequiredLength = 8
+);
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
