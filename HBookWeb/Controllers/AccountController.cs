@@ -33,8 +33,9 @@ namespace HBookWeb.Controllers
             return View(loginVM);
         }
 
-        public IActionResult Register()
+        public IActionResult Register(string returnUrl = null)
         {
+            returnUrl ??= Url.Content("~/");
             if (!_roleManager.RoleExistsAsync(SD.Role_Admin).GetAwaiter().GetResult())
             {
                 _roleManager.CreateAsync(new IdentityRole(SD.Role_Admin)).Wait();
@@ -47,7 +48,9 @@ namespace HBookWeb.Controllers
                 {
                     Text = r.Name,
                     Value = r.Name
-                })
+                }),
+
+                RedirectUrl = returnUrl
             };
             return View(registerVM);
         }
@@ -88,7 +91,7 @@ namespace HBookWeb.Controllers
                     }
                     else
                     {
-                        LocalRedirect(registerVM.RedirectUrl);
+                        return LocalRedirect(registerVM.RedirectUrl);
                     }
                 }
 
@@ -121,7 +124,7 @@ namespace HBookWeb.Controllers
                     }
                     else
                     {
-                        LocalRedirect(loginVM.RedirectUrl);
+                        return LocalRedirect(loginVM.RedirectUrl);
                     }
                 }
                 else
