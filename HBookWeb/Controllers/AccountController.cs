@@ -3,6 +3,7 @@ using HBook.Domain.Entities;
 using HBookWeb.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace HBookWeb.Controllers
 {
@@ -38,7 +39,16 @@ namespace HBookWeb.Controllers
                 _roleManager.CreateAsync(new IdentityRole("Admin")).Wait();
                 _roleManager.CreateAsync(new IdentityRole("Customer")).Wait();
             }
-            return View();
+
+            RegisterVM registerVM = new()
+            {
+                RoleList = _roleManager.Roles.Select(r => new SelectListItem
+                {
+                    Text = r.Name,
+                    Value = r.Name
+                })
+            };
+            return View(registerVM);
         }
     }
 }
