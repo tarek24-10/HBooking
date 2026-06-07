@@ -1,10 +1,13 @@
 ﻿using HBook.Application.Common.Interfaces;
+using HBook.Application.Common.Utility;
 using HBook.Domain.Entities;
 using HBook.Infrastructure.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HBookWeb.Controllers
 {
+    [Authorize]
     public class HotelController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;

@@ -1,11 +1,14 @@
 ﻿using HBook.Application.Common.Interfaces;
+using HBook.Application.Common.Utility;
 using HBook.Domain.Entities;
 using HBookWeb.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace HBookWeb.Controllers
 {
+    [Authorize(Roles = SD.Role_Admin)]
     public class AmenityController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
