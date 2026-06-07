@@ -52,6 +52,7 @@ namespace HBookWeb.Controllers
             return View(registerVM);
         }
 
+        [HttpPost]
         public async Task<IActionResult> Register(RegisterVM registerVM)
         {
             ApplicationUser user = new()
@@ -103,7 +104,7 @@ namespace HBookWeb.Controllers
             return View(registerVM);
         }
 
-
+        [HttpPost]
         public async Task<IActionResult> Login(LoginVM loginVM)
         {
             if (ModelState.IsValid)
