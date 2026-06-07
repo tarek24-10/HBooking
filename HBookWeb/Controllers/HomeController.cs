@@ -40,6 +40,28 @@ namespace HBookWeb.Controllers
             return View(homeVM);
         }
 
+        public IActionResult GetAvailableHotel (int nights, DateOnly checkInDate)
+        {
+            var hotelList = _unitOfWork.Hotel.GetAll(includeproperties: "Amenities");
+
+            foreach (var hotel in hotelList)
+            {
+                if (hotel.Id % 2 == 0)
+                {
+                    hotel.IsAvailable = false;
+                }
+            }
+
+            HomeVM homeVM = new HomeVM()
+            {
+                HotelList = hotelList,
+                CheckInDate = checkInDate,
+                Nights = nights
+            };
+
+            return View(homeVM);
+        }
+
         public IActionResult Privacy()
         {
             return View();

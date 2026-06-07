@@ -58,8 +58,9 @@
             </div>
 
         </div>
-        <div id="VillasList">
-            <div class="row px-lg-5 m-lg-4 m-sm-0 px-sm-0" style="--bs-gutter-x:0">
+
+        @* <div id="VillasList">
+             <div class="row px-lg-5 m-lg-4 m-sm-0 px-sm-0" style="--bs-gutter-x:0">
 
                         @foreach (var hotel in Model.HotelList)
                     {
@@ -127,7 +128,7 @@
                             </div>
                             <div class="modal-body m-0">
                                 
-                                    @* <div class="row">
+                                     <div class="row">
                                         <div class="col-12 col-md-5">
                                             <img src="@hotel.ImageUrl" style="border-radius:10px;" width="100%" />
                                         </div>
@@ -162,7 +163,7 @@
                                                 </span>
                                             </div>
                                         </div>
-                                    </div> *@
+                                    </div>
                                     <partial name="_HotelDetails" model="hotel"></partial>
                             </div>
                             <div class="modal-footer">
@@ -172,8 +173,9 @@
                         </div>
                     </div>
                 </div>
-                }
-            </div>
-        </div>
+                } 
+            </div> 
+        </div> *@
+        <partial name="_HotelList" model="Model"></partial>
     </form>
 </div>
