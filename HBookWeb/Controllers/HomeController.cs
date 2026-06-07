@@ -40,6 +40,8 @@ namespace HBookWeb.Controllers
             return View(homeVM);
         }
 
+        [HttpPost]
+
         public IActionResult GetAvailableHotel (int nights, DateOnly checkInDate)
         {
             var hotelList = _unitOfWork.Hotel.GetAll(includeproperties: "Amenities");
@@ -59,7 +61,7 @@ namespace HBookWeb.Controllers
                 Nights = nights
             };
 
-            return View(homeVM);
+            return PartialView("_HotelList" ,homeVM);
         }
 
         public IActionResult Privacy()
