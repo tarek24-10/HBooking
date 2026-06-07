@@ -32,6 +32,8 @@ namespace HBook.Domain.Entities
         public IEnumerable<Room> Rooms { get; set; }
         [ValidateNever]
         public IEnumerable<Amenity> Amenities { get; set; }
-        
+        [NotMapped]
+        public bool IsAvailable { get; set; } = true;
+
     }
 }
