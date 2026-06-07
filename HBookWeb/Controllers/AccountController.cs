@@ -1,4 +1,5 @@
 ﻿using HBook.Application.Common.Interfaces;
+using HBook.Application.Common.Utility;
 using HBook.Domain.Entities;
 using HBookWeb.ViewModels;
 using Microsoft.AspNetCore.Identity;
@@ -34,10 +35,10 @@ namespace HBookWeb.Controllers
 
         public IActionResult Register()
         {
-            if (!_roleManager.RoleExistsAsync("Admin").GetAwaiter().GetResult())
+            if (!_roleManager.RoleExistsAsync(SD.Role_Admin).GetAwaiter().GetResult())
             {
-                _roleManager.CreateAsync(new IdentityRole("Admin")).Wait();
-                _roleManager.CreateAsync(new IdentityRole("Customer")).Wait();
+                _roleManager.CreateAsync(new IdentityRole(SD.Role_Admin)).Wait();
+                _roleManager.CreateAsync(new IdentityRole(SD.Role_Customer)).Wait();
             }
 
             RegisterVM registerVM = new()
