@@ -186,6 +186,7 @@
     @section Scripts{
         <script>
             function loadHotelList(){
+                $('.spinner').show();
                                             var obj = {
                                                 checkInDate : $('#CheckInDate').val(),
                                                 nights : $('#Nights').val()
@@ -195,10 +196,21 @@
                                                 url : '@Url.Action("GetAvailableHotel", "Home")',
                                                 type : 'post',
                                                 data : obj,
-                                                success : function(result){
+                                                success : function(data){
                                                     $('#VillasList').empty();
-                                                    $('#VillasList').html(result);
-                                                }
+                                                    $('#VillasList').html(data);
+                                                    $('.spinner').hide();
+
+                                               
+                                                },
+                                                failure : function(responce){
+                                                    $('.spinner').hide();
+                                                    alert(responce.responceText);
+                                                 },
+                                                error : function(responce){
+                                                    $('.spinner').hide();
+                                                    alert(responce.responceText);
+                                                 }
                                             });
                                             }
         </script>

@@ -44,6 +44,7 @@ namespace HBookWeb.Controllers
 
         public IActionResult GetAvailableHotel (int nights, DateOnly checkInDate)
         {
+            //Thread.Sleep(250);
             var hotelList = _unitOfWork.Hotel.GetAll(includeproperties: "Amenities");
 
             foreach (var hotel in hotelList)
