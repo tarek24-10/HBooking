@@ -27,6 +27,13 @@ namespace HBookWeb.Controllers
         }
 
         [Authorize]
+        public IActionResult BookingDetails(int bookingId)
+        {
+            var booking = _unitOfWork.Booking.Get(b => b.Id == bookingId, includeproperties: "Hotel,User");
+            return View(booking);
+        }
+
+        [Authorize]
         public IActionResult FinalizeBooking(int HotelId, string CheckIn, int Nights)
         {
             var checkInDate = DateOnly.Parse(CheckIn);
@@ -119,18 +126,26 @@ namespace HBookWeb.Controllers
         #region API Calls
         [HttpGet]
         [Authorize]
-        public IActionResult GetAll()
+        public IActionResult GetAll(string status)
         {
-            if(!User.IsInRole(SD.Role_Admin))
+            IEnumerable<Booking> bookings;
+            if (!User.IsInRole(SD.Role_Admin))
             {
                 var claimsIdentity = (ClaimsIdentity)User.Identity;
                 var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
-                var userBookings = _unitOfWork.Booking.GetAll(b => b.UserId == userId, includeproperties: "Hotel,User");
-                return Json(new { data = userBookings });
+                bookings = _unitOfWork.Booking.GetAll(b => b.UserId == userId, includeproperties: "Hotel,User");
             }
-            var bookings = _unitOfWork.Booking.GetAll(includeproperties: "Hotel,User");
+            else
+            {
+                bookings = _unitOfWork.Booking.GetAll(includeproperties: "Hotel,User");
+            }
+            if (!string.IsNullOrEmpty(status))
+            {
+                bookings = bookings.Where(b => b.Status == status);
+            }
             return Json(new { data = bookings });
         }
+       
         #endregion
     }
 }

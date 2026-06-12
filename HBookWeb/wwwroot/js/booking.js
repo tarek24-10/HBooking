@@ -1,12 +1,14 @@
 ﻿var dataTable;
 
 $(document).ready(function () {
-    loadDataatble();
+    var urlParams = new URLSearchParams(window.location.search);
+    var status = urlParams.get('status');
+    loadDataatble(status);
 });
-function loadDataatble() {
+function loadDataatble(status) {
     $("#tblBookings").DataTable({
         "ajax": {
-            "url": "/Booking/GetAll"
+            "url": "/Booking/GetAll?status=" + status
         },
 
         "columns": [
