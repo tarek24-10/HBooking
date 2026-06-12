@@ -8,5 +8,8 @@ namespace HBook.Application.Common.Interfaces
     public interface IBookingRepository : IRepository<Booking>
     {
         void Update(Booking entity);
+
+        void UpdateBookingStatus(int bookingId, string BookingStatus);
+        void UpdateStripePaymentId(int bookingId, string sessionId, string stripeIntentId);
     }
 }
