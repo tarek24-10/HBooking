@@ -1,4 +1,5 @@
 ﻿using HBook.Application.Common.Interfaces;
+using HBook.Application.Common.Utility;
 using HBook.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -13,6 +14,7 @@ namespace HBookWeb.Controllers
         {
             _unitOfWork = unitOfWork;
         }
+
         [Authorize]
         public IActionResult FinalizeBooking(int HotelId, DateOnly CheckIn, int Nights)
         {
@@ -22,6 +24,7 @@ namespace HBookWeb.Controllers
 
             Booking booking = new Booking
             {
+                UserId = userId,
                 Name = user.Name,
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber,
@@ -34,6 +37,25 @@ namespace HBookWeb.Controllers
             booking.TotalCost = booking.Hotel.Price * Nights;
 
             return View(booking);
+        }
+
+        [HttpPost]
+        public IActionResult FinalizeBooking(Booking booking)
+        {
+            var hotel = _unitOfWork.Hotel.Get(h => h.Id == booking.HotelId);
+            booking.TotalCost = hotel.Price * booking.Nights;
+
+            booking.Status = SD.StatusPending;
+            booking.BookingDate = DateTime.Now;
+
+            _unitOfWork.Booking.Add(booking);
+            _unitOfWork.Save();
+            return RedirectToAction(nameof(BookingConfirmation), new { bookingId = booking.Id });
+        }
+
+        public IActionResult BookingConfirmation(int bookingId)
+        {
+            return View(bookingId);
         }
     }
 }
