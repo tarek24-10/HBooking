@@ -30,6 +30,7 @@ namespace HBookWeb.Controllers
         public IActionResult BookingDetails(int bookingId)
         {
             var booking = _unitOfWork.Booking.Get(b => b.Id == bookingId, includeproperties: "Hotel,User");
+            booking.Hotel = _unitOfWork.Hotel.Get(h => h.Id == booking.Hotel.Id, includeproperties: "Amenities");
             return View(booking);
         }
 
