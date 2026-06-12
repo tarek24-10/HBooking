@@ -2,6 +2,7 @@
 using HBook.Application.Common.Utility;
 using HBook.Domain.Entities;
 using HBook.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore.SqlServer.Query.Internal;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -34,18 +35,21 @@ namespace HBook.Infrastructure.Repository
                 {
                     booking.ActualCheckOutDate = DateTime.Now;
                 }
-                _context.Update(booking);
             }
         }
 
         public void UpdateStripePaymentId(int bookingId, string sessionId, string stripeIntentId)
         {
             var booking = _context.Bookings.Find(bookingId);
-            if (booking != null)
+            if (!string.IsNullOrEmpty(sessionId))
             {
-                booking.SessionId = sessionId;
+                booking.StripeSessionId = sessionId;
+            }
+            if (!string.IsNullOrEmpty(stripeIntentId))
+            {
                 booking.StripePaymentIntentId = stripeIntentId;
-                _context.Update(booking);
+                booking.PaymentDate = DateTime.Now;
+                booking.IsPaymentSuccessful = true;
             }
         }
     }

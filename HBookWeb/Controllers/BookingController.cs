@@ -3,7 +3,12 @@ using HBook.Application.Common.Utility;
 using HBook.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Stripe.BillingPortal;
+using Stripe.Checkout;
 using System.Security.Claims;
+using Session = Stripe.Checkout.Session;
+using SessionCreateOptions = Stripe.Checkout.SessionCreateOptions;
+using SessionService = Stripe.Checkout.SessionService;
 
 namespace HBookWeb.Controllers
 {
@@ -16,8 +21,9 @@ namespace HBookWeb.Controllers
         }
 
         [Authorize]
-        public IActionResult FinalizeBooking(int HotelId, DateOnly CheckIn, int Nights)
+        public IActionResult FinalizeBooking(int HotelId, string CheckIn, int Nights)
         {
+            var checkInDate = DateOnly.Parse(CheckIn);
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
             ApplicationUser user = _unitOfWork.ApplicationUser.Get(u => u.Id == userId);
@@ -29,10 +35,10 @@ namespace HBookWeb.Controllers
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber,
                 HotelId = HotelId,
-                CheckInDate = CheckIn,
+                CheckInDate = checkInDate,
                 Nights = Nights,
                 Hotel = _unitOfWork.Hotel.Get(h => h.Id == HotelId, includeproperties: "Amenities"),
-                CheckOutDate = CheckIn.AddDays(Nights),
+                CheckOutDate = checkInDate.AddDays(Nights),
             };
             booking.TotalCost = booking.Hotel.Price * Nights;
 
@@ -50,11 +56,57 @@ namespace HBookWeb.Controllers
 
             _unitOfWork.Booking.Add(booking);
             _unitOfWork.Save();
-            return RedirectToAction(nameof(BookingConfirmation), new { bookingId = booking.Id });
+
+            var domain = $"{Request.Scheme}://{Request.Host.Value}";
+            var options = new SessionCreateOptions
+            {
+                LineItems = new List<SessionLineItemOptions>(),
+                SuccessUrl = domain + $"/Booking/BookingConfirmation?bookingId={booking.Id}",
+                CancelUrl = domain + $"/Booking/FinalizeBooking?HotelId={booking.HotelId}&CheckIn={booking.CheckInDate}&Nights={booking.Nights}",
+                Mode = "payment",
+            };
+
+            options.LineItems.Add(new SessionLineItemOptions
+            {
+                PriceData = new SessionLineItemPriceDataOptions
+                {
+                    UnitAmount = (long)(booking.TotalCost * 100), // Convert to cents
+                    Currency = "usd",
+                    ProductData = new SessionLineItemPriceDataProductDataOptions
+                    {
+                        Name = hotel.Name,
+                        Description = $"Booking for {booking.Nights} nights at {hotel.Name}",
+                    },
+                },
+                Quantity = 1,
+            });
+
+            var service = new SessionService();
+            Session session = service.Create(options);
+
+            _unitOfWork.Booking.UpdateStripePaymentId(booking.Id, session.Id, session.PaymentIntentId);
+            _unitOfWork.Save();
+
+            Response.Headers.Add("Location", session.Url);
+
+            return new StatusCodeResult(303);
         }
 
         public IActionResult BookingConfirmation(int bookingId)
         {
+            var booking = _unitOfWork.Booking.Get(b => b.Id == bookingId, includeproperties: "Hotel,User");
+
+            var service = new SessionService();
+            Session session = service.Get(booking.StripeSessionId);
+
+            if (booking.Status == SD.StatusPending)
+            {
+                _unitOfWork.Booking.UpdateBookingStatus(booking.Id, SD.StatusApproved);
+                _unitOfWork.Booking.UpdateStripePaymentId(booking.Id, booking.StripeSessionId, session.PaymentIntentId);
+                _unitOfWork.Save();
+            }
+
+
             return View(bookingId);
         }
     }

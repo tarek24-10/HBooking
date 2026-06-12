@@ -32,7 +32,7 @@
                         {
                             @if (hotel.IsAvailable)
                             {
-                                <a asp-controller="Booking" asp-action="FinalizeBooking" asp-route-HotelId="@hotel.Id" asp-route-CheckIn="@Model.CheckInDate" asp-route-Nights="@Model.Nights" class="btn btn-success form-control btn-block">
+                                        <a asp-controller="Booking" asp-action="FinalizeBooking" asp-route-HotelId="@hotel.Id" asp-route-CheckIn="@Model.CheckInDate.ToString("yyyy-MM-dd")" asp-route-Nights="@Model.Nights" class="btn btn-success form-control btn-block">
                                     Book
                                 </a>
                             }
@@ -70,7 +70,7 @@
                 </div>
                 <div class="modal-body m-0">
                                 
-                    <div class="row">
+                    @* <div class="row">
                                         <div class="col-12 col-md-5">
                                             <img src="@hotel.ImageUrl" style="border-radius:10px;" width="100%" />
                                         </div>
@@ -105,7 +105,7 @@
                                                 </span>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> *@
                     <partial name="_HotelDetails" model="hotel"></partial>
                     </div>
                     <div class="modal-footer">

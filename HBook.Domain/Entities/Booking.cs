@@ -32,7 +32,7 @@ namespace HBook.Domain.Entities
         public bool IsPaymentSuccessful { get; set; }
         public DateTime PaymentDate { get; set; }
         public string? StripePaymentIntentId { get; set; }
-        public string? SessionId { get; set; }
+        public string? StripeSessionId { get; set; }
         public DateTime ActualCheckInDate { get; set; }
         public DateTime ActualCheckOutDate { get; set; }
     }
