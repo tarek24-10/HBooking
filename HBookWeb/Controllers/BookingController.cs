@@ -1,6 +1,8 @@
 ﻿using HBook.Application.Common.Interfaces;
 using HBook.Domain.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace HBookWeb.Controllers
 {
@@ -11,10 +13,18 @@ namespace HBookWeb.Controllers
         {
             _unitOfWork = unitOfWork;
         }
+        [Authorize]
         public IActionResult FinalizeBooking(int HotelId, DateOnly CheckIn, int Nights)
         {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+            ApplicationUser user = _unitOfWork.ApplicationUser.Get(u => u.Id == userId);
+
             Booking booking = new Booking
             {
+                Name = user.Name,
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
                 HotelId = HotelId,
                 CheckInDate = CheckIn,
                 Nights = Nights,
