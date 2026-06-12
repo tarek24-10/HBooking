@@ -13,6 +13,7 @@ namespace HBook.Infrastructure.Repository
         public IRoomRepository Room { get; private set; }
         public IAmenityRepository Amenity { get; private set; }
         public IBookingRepository Booking { get; private set; }
+        public IApplicationUserRepository ApplicationUser { get; private set; }
 
         private readonly ApplicationDbContext _context;
 
@@ -22,6 +23,7 @@ namespace HBook.Infrastructure.Repository
             Room = new RoomRepository(context);
             Amenity = new AmenityRepository(context);
             Booking = new BookingRepository(context);
+            ApplicationUser = new ApplicationUserRepository(context);
             _context = context;
         }
 
