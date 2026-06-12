@@ -21,6 +21,12 @@ namespace HBookWeb.Controllers
         }
 
         [Authorize]
+        public IActionResult Index()
+        {
+            return View();
+        }
+
+        [Authorize]
         public IActionResult FinalizeBooking(int HotelId, string CheckIn, int Nights)
         {
             var checkInDate = DateOnly.Parse(CheckIn);
@@ -109,5 +115,22 @@ namespace HBookWeb.Controllers
 
             return View(bookingId);
         }
+
+        #region API Calls
+        [HttpGet]
+        [Authorize]
+        public IActionResult GetAll()
+        {
+            if(!User.IsInRole(SD.Role_Admin))
+            {
+                var claimsIdentity = (ClaimsIdentity)User.Identity;
+                var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+                var userBookings = _unitOfWork.Booking.GetAll(b => b.UserId == userId, includeproperties: "Hotel,User");
+                return Json(new { data = userBookings });
+            }
+            var bookings = _unitOfWork.Booking.GetAll(includeproperties: "Hotel,User");
+            return Json(new { data = bookings });
+        }
+        #endregion
     }
 }
