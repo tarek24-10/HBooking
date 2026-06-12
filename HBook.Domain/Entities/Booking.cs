@@ -14,9 +14,9 @@ namespace HBook.Domain.Entities
         [ForeignKey("UserId")]
         public ApplicationUser User { get; set; }
         [Required]
-        public int RoomId { get; set; }
-        [ForeignKey("RoomId")]
-        public Room Room { get; set; }
+        public int HotelId { get; set; }
+        [ForeignKey("HotelId")]
+        public Hotel Hotel { get; set; }
         [Required]
         public string Name { get; set; }
         [Required]
@@ -27,7 +27,7 @@ namespace HBook.Domain.Entities
         public int Nights { get; set; }
         public DateOnly CheckOutDate { get; set; }
         [Required]
-        public int TotalCost { get; set; }
+        public double TotalCost { get; set; }
         public string? Status { get; set; }
         public bool IsPaymentSuccessful { get; set; }
         public DateTime PaymentDate { get; set; }

@@ -26,21 +26,6 @@ namespace HBookWeb.Controllers
         }
 
         [HttpPost]
-        public IActionResult Index(HomeVM homeVM)
-        {
-            homeVM.HotelList = _unitOfWork.Hotel.GetAll(includeproperties: "Amenities");
-            foreach (var hotel in homeVM.HotelList)
-            {
-                if (hotel.Id % 2 == 0)
-                {
-                    hotel.IsAvailable = false;
-                }
-            }
-
-            return View(homeVM);
-        }
-
-        [HttpPost]
 
         public IActionResult GetAvailableHotel (int nights, DateOnly checkInDate)
         {

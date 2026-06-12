@@ -169,6 +169,9 @@ namespace HBook.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("HotelId")
+                        .HasColumnType("int");
+
                     b.Property<bool>("IsPaymentSuccessful")
                         .HasColumnType("bit");
 
@@ -185,9 +188,6 @@ namespace HBook.Infrastructure.Migrations
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("RoomId")
-                        .HasColumnType("int");
-
                     b.Property<string>("SessionId")
                         .HasColumnType("nvarchar(max)");
 
@@ -197,8 +197,8 @@ namespace HBook.Infrastructure.Migrations
                     b.Property<string>("StripePaymentIntentId")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("TotalCost")
-                        .HasColumnType("int");
+                    b.Property<double>("TotalCost")
+                        .HasColumnType("float");
 
                     b.Property<string>("UserId")
                         .IsRequired()
@@ -206,7 +206,7 @@ namespace HBook.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("RoomId");
+                    b.HasIndex("HotelId");
 
                     b.HasIndex("UserId");
 
@@ -483,9 +483,9 @@ namespace HBook.Infrastructure.Migrations
 
             modelBuilder.Entity("HBook.Domain.Entities.Booking", b =>
                 {
-                    b.HasOne("HBook.Domain.Entities.Room", "Room")
+                    b.HasOne("HBook.Domain.Entities.Hotel", "Hotel")
                         .WithMany()
-                        .HasForeignKey("RoomId")
+                        .HasForeignKey("HotelId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -495,7 +495,7 @@ namespace HBook.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Room");
+                    b.Navigation("Hotel");
 
                     b.Navigation("User");
                 });
