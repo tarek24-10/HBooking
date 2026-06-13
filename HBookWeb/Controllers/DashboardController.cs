@@ -32,21 +32,40 @@ namespace HBookWeb.Controllers
             var countByPreviousMonth = totalBookings.Count(b => b.BookingDate >= previousMonthStartDate
             && b.BookingDate < CurrentMonthStartDate);
 
+            return Json(GetRadialChartDataModel(totalBookings.Count(), countByCurrentMonth, countByPreviousMonth));
+        }
+
+
+        public async Task<IActionResult> GetTotalRegistrationRadialChartData()
+        {
+            var totalUsers = _unitOfWork.ApplicationUser.GetAll();
+
+            var countByCurrentMonth = totalUsers.Count(u => u.CreatedAt >= CurrentMonthStartDate
+            && u.CreatedAt <= DateTime.Now);
+
+            var countByPreviousMonth = totalUsers.Count(u => u.CreatedAt>= previousMonthStartDate
+            && u.CreatedAt < CurrentMonthStartDate);
+
+            return Json(GetRadialChartDataModel(totalUsers.Count(), countByCurrentMonth, countByPreviousMonth));
+        }
+
+        private static RadialBarChartVM GetRadialChartDataModel(int totalCount, int countByCurrentMonth, int countByPreviousMonth)
+        {
             RadialBarChartVM radialBarChartVM = new();
 
             int increaseDecreaseRatio = 100;
 
-            if(countByPreviousMonth != 0)
+            if (countByPreviousMonth != 0)
             {
                 increaseDecreaseRatio = Convert.ToInt32((countByCurrentMonth - countByPreviousMonth) / countByPreviousMonth * 100);
             }
 
-            radialBarChartVM.TotalCount = totalBookings.Count();
+            radialBarChartVM.TotalCount = totalCount;
             radialBarChartVM.CountInCurrentMonth = countByCurrentMonth;
             radialBarChartVM.HasRatioIncreased = countByCurrentMonth > countByPreviousMonth;
             radialBarChartVM.Series = new int[] { increaseDecreaseRatio };
 
-            return Json(radialBarChartVM);
+            return radialBarChartVM;
         }
-    }
+    }  
 }
