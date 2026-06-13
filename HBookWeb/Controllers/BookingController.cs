@@ -32,7 +32,7 @@ namespace HBookWeb.Controllers
             var booking = _unitOfWork.Booking.Get(b => b.Id == bookingId, includeproperties: "Hotel,User");
             booking.Hotel = _unitOfWork.Hotel.Get(h => h.Id == booking.Hotel.Id, includeproperties: "Amenities");
 
-            if(booking.RoomNumber == 0 && booking.Status == SD.StatusApproved)
+            if (booking.RoomNumber == 0 && booking.Status == SD.StatusApproved)
             {
                 var availableRoomNumbers = GetAvailableRoomNumbersINHotel(booking.HotelId);
 
@@ -174,6 +174,15 @@ namespace HBookWeb.Controllers
             }
 
             return availableRoomNumbers;
+        }
+
+        [HttpPost]
+        [Authorize(Roles = SD.Role_Admin)]
+        public IActionResult CheckIN (Booking booking)
+        {
+            _unitOfWork.Booking.UpdateBookingStatus(booking.Id, SD.StatusCheckedIn, booking.RoomNumber);
+            _unitOfWork.Save();
+            return RedirectToAction(nameof(BookingDetails), new { bookingId = booking.Id });
         }
     }
 }
