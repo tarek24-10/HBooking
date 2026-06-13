@@ -1,4 +1,5 @@
 using HBook.Application.Common.Interfaces;
+using HBook.Application.Common.Utility;
 using HBookWeb.Models;
 using HBookWeb.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -27,14 +28,18 @@ namespace HBookWeb.Controllers
 
         [HttpPost]
 
-        public IActionResult GetAvailableHotel (int nights, DateOnly checkInDate)
+        public IActionResult GetHotelByDate (int nights, DateOnly checkInDate)
         {
             //Thread.Sleep(250);
-            var hotelList = _unitOfWork.Hotel.GetAll(includeproperties: "Amenities");
+            var hotelList = _unitOfWork.Hotel.GetAll(includeproperties: "Amenities").ToList();
+            var roomList = _unitOfWork.Room.GetAll().ToList();
+            var bookingss = _unitOfWork.Booking.GetAll(b => b.Status == SD.StatusApproved 
+            || b.Status == SD.StatusCheckedIn).ToList();
 
-            foreach (var hotel in hotelList)
+            foreach(var hotel in hotelList)
             {
-                if (hotel.Id % 2 == 0)
+                int roomsAvailable = SD.HotelRoomsAvailable_Count(hotel.Id, roomList, bookingss, checkInDate, nights);
+                if (roomsAvailable == 0)
                 {
                     hotel.IsAvailable = false;
                 }

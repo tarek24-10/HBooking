@@ -192,7 +192,7 @@
                                             };
 
                                             $.ajax({
-                                                url : '@Url.Action("GetAvailableHotel", "Home")',
+                                                url : '@Url.Action("GetHotelByDate", "Home")',
                                                 type : 'post',
                                                 data : obj,
                                                 success : function(data){
