@@ -49,6 +49,21 @@ namespace HBookWeb.Controllers
             return Json(GetRadialChartDataModel(totalUsers.Count(), countByCurrentMonth, countByPreviousMonth));
         }
 
+        public async Task<IActionResult> GetTotalRevenueRadialChartData()
+        {
+            var totalBookings = _unitOfWork.Booking.GetAll(b => b.Status != SD.StatusCancelled || b.Status != SD.StatusPending);
+
+            var totalRevenue = Convert.ToInt32(totalBookings.Sum(b => b.TotalCost));
+
+            var countByCurrentMonth = totalBookings.Where(u => u.BookingDate >= CurrentMonthStartDate
+            && u.BookingDate <= DateTime.Now).Sum(b => b.TotalCost);
+
+            var countByPreviousMonth = totalBookings.Where(u => u.BookingDate>= previousMonthStartDate
+            && u.BookingDate < CurrentMonthStartDate).Sum(b => b.TotalCost);
+
+            return Json(GetRadialChartDataModel(totalRevenue,Convert.ToInt32(countByCurrentMonth),Convert.ToInt32(countByPreviousMonth)));
+        }
+
         private static RadialBarChartVM GetRadialChartDataModel(int totalCount, int countByCurrentMonth, int countByPreviousMonth)
         {
             RadialBarChartVM radialBarChartVM = new();
