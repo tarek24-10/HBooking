@@ -182,6 +182,27 @@ namespace HBookWeb.Controllers
         {
             _unitOfWork.Booking.UpdateBookingStatus(booking.Id, SD.StatusCheckedIn, booking.RoomNumber);
             _unitOfWork.Save();
+            TempData["success"] = "Booking checked in successfully.";
+            return RedirectToAction(nameof(BookingDetails), new { bookingId = booking.Id });
+        }
+
+        [HttpPost]
+        [Authorize(Roles = SD.Role_Admin)]
+        public IActionResult CheckOut (Booking booking)
+        {
+            _unitOfWork.Booking.UpdateBookingStatus(booking.Id, SD.StatusCompleted, booking.RoomNumber);
+            _unitOfWork.Save();
+            TempData["success"] = "Booking checked out successfully.";
+            return RedirectToAction(nameof(BookingDetails), new { bookingId = booking.Id });
+        }
+
+        [HttpPost]
+        [Authorize(Roles = SD.Role_Admin)]
+        public IActionResult CancelBooking (Booking booking)
+        {
+            _unitOfWork.Booking.UpdateBookingStatus(booking.Id, SD.StatusCancelled, 0);
+            _unitOfWork.Save();
+            TempData["success"] = "Booking cancelled successfully.";
             return RedirectToAction(nameof(BookingDetails), new { bookingId = booking.Id });
         }
     }
