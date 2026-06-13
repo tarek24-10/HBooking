@@ -2,7 +2,7 @@
     var chartColors = getCharColorsArray(id);
     var options = {
         fill: {
-            colors: chartColors
+            colors: chartColors,
         },
         chart: {
             height: 90,
@@ -21,6 +21,7 @@
                 dataLabels: {
                     value: {
                         offsetY: -10,
+                        color: chartColors
                     }
                 }
             }
