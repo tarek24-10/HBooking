@@ -9,7 +9,7 @@ namespace HBook.Application.Common.Interfaces
     {
         void Update(Booking entity);
 
-        void UpdateBookingStatus(int bookingId, string BookingStatus);
+        void UpdateBookingStatus(int bookingId, string BookingStatus, int roomNumber);
         void UpdateStripePaymentId(int bookingId, string sessionId, string stripeIntentId);
     }
 }

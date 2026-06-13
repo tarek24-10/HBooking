@@ -115,7 +115,7 @@ namespace HBookWeb.Controllers
 
             if (booking.Status == SD.StatusPending)
             {
-                _unitOfWork.Booking.UpdateBookingStatus(booking.Id, SD.StatusApproved);
+                _unitOfWork.Booking.UpdateBookingStatus(booking.Id, SD.StatusApproved, 0);
                 _unitOfWork.Booking.UpdateStripePaymentId(booking.Id, booking.StripeSessionId, session.PaymentIntentId);
                 _unitOfWork.Save();
             }

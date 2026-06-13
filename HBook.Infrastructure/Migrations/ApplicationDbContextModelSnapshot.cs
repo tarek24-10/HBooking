@@ -188,6 +188,9 @@ namespace HBook.Infrastructure.Migrations
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("RoomNumber")
+                        .HasColumnType("int");
+
                     b.Property<string>("Status")
                         .HasColumnType("nvarchar(max)");
 

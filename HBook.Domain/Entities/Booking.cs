@@ -35,5 +35,9 @@ namespace HBook.Domain.Entities
         public string? StripeSessionId { get; set; }
         public DateTime ActualCheckInDate { get; set; }
         public DateTime ActualCheckOutDate { get; set; }
+
+        public int RoomNumber { get; set; }
+        [NotMapped]
+        public List<Room> AvailableRooms { get; set; }
     }
 }

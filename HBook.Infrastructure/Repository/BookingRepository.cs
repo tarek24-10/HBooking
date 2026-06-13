@@ -21,7 +21,7 @@ namespace HBook.Infrastructure.Repository
             _context.Update(entity);
         }
 
-        public void UpdateBookingStatus(int bookingId, string BookingStatus)
+        public void UpdateBookingStatus(int bookingId, string BookingStatus, int roomNumber)
         {
             var booking = _context.Bookings.Find(bookingId);
             if (booking != null)
@@ -29,6 +29,7 @@ namespace HBook.Infrastructure.Repository
                 booking.Status = BookingStatus;
                 if(BookingStatus == SD.StatusCheckedIn)
                 {
+                    booking.RoomNumber = roomNumber;
                     booking.ActualCheckInDate = DateTime.Now;
                 }
                 else if (BookingStatus == SD.StatusCompleted)
