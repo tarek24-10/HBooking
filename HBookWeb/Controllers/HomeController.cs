@@ -33,12 +33,12 @@ namespace HBookWeb.Controllers
             //Thread.Sleep(250);
             var hotelList = _unitOfWork.Hotel.GetAll(includeproperties: "Amenities").ToList();
             var roomList = _unitOfWork.Room.GetAll().ToList();
-            var bookingss = _unitOfWork.Booking.GetAll(b => b.Status == SD.StatusApproved 
+            var bookings = _unitOfWork.Booking.GetAll(b => b.Status == SD.StatusApproved 
             || b.Status == SD.StatusCheckedIn).ToList();
 
             foreach(var hotel in hotelList)
             {
-                int roomsAvailable = SD.HotelRoomsAvailable_Count(hotel.Id, roomList, bookingss, checkInDate, nights);
+                int roomsAvailable = SD.HotelRoomsAvailable_Count(hotel.Id, roomList, bookings, checkInDate, nights);
                 if (roomsAvailable == 0)
                 {
                     hotel.IsAvailable = false;

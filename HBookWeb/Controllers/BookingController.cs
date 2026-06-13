@@ -70,13 +70,29 @@ namespace HBookWeb.Controllers
         [HttpPost]
         public IActionResult FinalizeBooking(Booking booking)
         {
+
             var hotel = _unitOfWork.Hotel.Get(h => h.Id == booking.HotelId);
             booking.TotalCost = hotel.Price * booking.Nights;
 
             booking.Status = SD.StatusPending;
             booking.BookingDate = DateTime.Now;
 
+            //
+            var roomList = _unitOfWork.Room.GetAll().ToList();
+            var bookings = _unitOfWork.Booking.GetAll(b => b.Status == SD.StatusApproved
+            || b.Status == SD.StatusCheckedIn).ToList();
+
+            
+                int roomsAvailable = SD.HotelRoomsAvailable_Count(hotel.Id, roomList, bookings, booking.CheckInDate, booking.Nights);
+                if (roomsAvailable == 0)
+                {
+                    TempData["error"] = "Room has been sold out.";
+                return RedirectToAction(nameof(FinalizeBooking), new { HotelId = booking.HotelId, CheckIn = booking.CheckInDate.ToString("yyyy-MM-dd"), Nights = booking.Nights });
+                }
+            //
+
             _unitOfWork.Booking.Add(booking);
+
             _unitOfWork.Save();
 
             var domain = $"{Request.Scheme}://{Request.Host.Value}";
