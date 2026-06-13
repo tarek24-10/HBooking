@@ -82,5 +82,26 @@ namespace HBookWeb.Controllers
 
             return radialBarChartVM;
         }
-    }  
+
+        public async Task<IActionResult> GetBookingPieChartData()
+        {
+            var totalBookings = _unitOfWork.Booking.GetAll(b => b.BookingDate >= DateTime.Now.AddDays(-30)
+            && (b.Status != SD.StatusCancelled || b.Status != SD.StatusPending));
+
+            var customerWithOneBooking = totalBookings.GroupBy(b => b.UserId).Where(x => x.Count() == 1).Select(x => x.Key).ToList();
+
+            int bookingsByNewCustomers = customerWithOneBooking.Count();
+
+            int bookingsByReturnedCustomers = totalBookings.Count() - bookingsByNewCustomers;
+
+            var pieChartVM = new PieChartVM
+            {
+                Series = new decimal[] { bookingsByNewCustomers, bookingsByReturnedCustomers },
+                labels = new string[] { "New Customer Bookings", "Returned Customer Bookings" }
+            };
+
+            return Json(pieChartVM);
+        }
+
+    }
 }
