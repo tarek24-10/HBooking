@@ -118,6 +118,12 @@ namespace HBookWeb.Controllers
 
                 if (result.Succeeded)
                 {
+                    var user = await _userManager.FindByEmailAsync(loginVM.Email);
+                    if (_userManager.IsInRoleAsync(user, SD.Role_Admin).Result)
+                    {
+                        return RedirectToAction("Index", "AdminDashboard");
+                    }
+
                     if (string.IsNullOrEmpty(loginVM.RedirectUrl))
                     {
                         return RedirectToAction("Index", "Home");
