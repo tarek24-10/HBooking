@@ -70,10 +70,10 @@ namespace HBookWeb.Controllers
 
             int increaseDecreaseRatio = 100;
 
-            if (countByPreviousMonth != 0)
-            {
-                increaseDecreaseRatio = Convert.ToInt32((countByCurrentMonth - countByPreviousMonth) / countByPreviousMonth * 100);
-            }
+            //if (countByPreviousMonth != 0)
+            //{
+                increaseDecreaseRatio = Convert.ToInt32((countByCurrentMonth - countByPreviousMonth) / (countByPreviousMonth == 0 ? 1 : countByPreviousMonth) * 100);
+            //}
 
             radialBarChartVM.TotalCount = totalCount;
             radialBarChartVM.CountInCurrentMonth = countByCurrentMonth;
