@@ -38,6 +38,6 @@ namespace HBook.Domain.Entities
 
         public int RoomNumber { get; set; }
         [NotMapped]
-        public List<Room> AvailableRooms { get; set; }
+        public IEnumerable<Room> AvailableRooms { get; set; }
     }
 }

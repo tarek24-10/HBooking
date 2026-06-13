@@ -31,6 +31,14 @@ namespace HBookWeb.Controllers
         {
             var booking = _unitOfWork.Booking.Get(b => b.Id == bookingId, includeproperties: "Hotel,User");
             booking.Hotel = _unitOfWork.Hotel.Get(h => h.Id == booking.Hotel.Id, includeproperties: "Amenities");
+
+            if(booking.RoomNumber == 0 && booking.Status == SD.StatusApproved)
+            {
+                var availableRoomNumbers = GetAvailableRoomNumbersINHotel(booking.HotelId);
+
+                booking.AvailableRooms = _unitOfWork.Room.GetAll(r => r.HotelId == booking.HotelId && availableRoomNumbers.Any(n => n == r.RoomNumber));
+            }
+
             return View(booking);
         }
 
@@ -146,7 +154,26 @@ namespace HBookWeb.Controllers
             }
             return Json(new { data = bookings });
         }
-       
+
         #endregion
+
+        private List<int> GetAvailableRoomNumbersINHotel(int hotelId)
+        {
+            List<int> availableRoomNumbers = new List<int>();
+
+            var roomsInHotel = _unitOfWork.Room.GetAll(r => r.HotelId == hotelId);
+
+            var checkedInRooms = _unitOfWork.Booking.GetAll(b => b.HotelId == hotelId && b.Status == SD.StatusCheckedIn).Select(b => b.RoomNumber);
+
+            foreach (var room in roomsInHotel)
+            {
+                if (!checkedInRooms.Contains(room.RoomNumber))
+                {
+                    availableRoomNumbers.Add(room.RoomNumber);
+                }
+            }
+
+            return availableRoomNumbers;
+        }
     }
 }

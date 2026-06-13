@@ -53,5 +53,6 @@ namespace HBook.Infrastructure.Repository
                 booking.IsPaymentSuccessful = true;
             }
         }
+
     }
 }
