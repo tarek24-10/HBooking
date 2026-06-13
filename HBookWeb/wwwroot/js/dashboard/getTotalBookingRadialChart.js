@@ -13,7 +13,6 @@ function loadTotalBookingRadialChart() {
         dataType: "json",
         success: function (data) {
 
-            console.log(data);
             $("#totalBookingCount").html(data.totalCount);
 
             if (data.hasRatioIncreased) {
@@ -28,8 +27,10 @@ function loadTotalBookingRadialChart() {
                 </span> ${data.countInCurrentMonth}`)
             }
 
+            loadRadialBarChart("totalBookingRadialChart", data);
+
             $(".chart-spinner").hide();
         }
 
-    });
+    });  
 }
