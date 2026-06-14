@@ -7,6 +7,7 @@ using Stripe.BillingPortal;
 using Stripe.Checkout;
 using Syncfusion.DocIO;
 using Syncfusion.DocIO.DLS;
+using Syncfusion.Drawing;
 using System.Reflection.Metadata;
 using System.Security.Claims;
 using Session = Stripe.Checkout.Session;
@@ -60,7 +61,7 @@ namespace HBookWeb.Controllers
 
             document.Open(fileStream, FormatType.Automatic);
 
-            Booking bookingFromDb = _unitOfWork.Booking.Get(b => b.Id == id);
+            Booking bookingFromDb = _unitOfWork.Booking.Get(b => b.Id == id, includeproperties:"Hotel");
 
             TextSelection textSelection = document.Find("xx_customer_name", false, true);
             WTextRange wTextRange = textSelection.GetAsOneRange();
@@ -100,6 +101,59 @@ namespace HBookWeb.Controllers
             textSelection = document.Find("xx_BOOKING_NUMBER", false, true);
             wTextRange = textSelection.GetAsOneRange();
             wTextRange.Text = "BOOKING NUMBER - " + bookingFromDb.Id.ToString();
+
+            WTable table = new(document);
+
+            table.TableFormat.Borders.LineWidth = 1f;
+            table.TableFormat.Borders.Color = Color.Black;
+            table.TableFormat.Paddings.Top = 7f;
+            table.TableFormat.Paddings.Bottom = 7f;
+            table.TableFormat.Borders.Horizontal.LineWidth = 1f;
+
+
+            table.ResetCells(2, 4);
+
+            WTableRow row0 = table.Rows[0];
+            row0.Cells[0].AddParagraph().AppendText("NIGHTS");
+            row0.Cells[0].Width = 80;
+            row0.Cells[1].AddParagraph().AppendText("HOTEL");
+            row0.Cells[1].Width = 220;
+            row0.Cells[2].AddParagraph().AppendText("PRICE PER NIGHT");
+            row0.Cells[3].AddParagraph().AppendText("TOTAL");
+            row0.Cells[3].Width = 80;
+
+
+            WTableRow row1 = table.Rows[1];
+            row1.Cells[0].AddParagraph().AppendText(bookingFromDb.Nights.ToString());
+            row1.Cells[0].Width = 80;
+            row1.Cells[1].AddParagraph().AppendText(bookingFromDb.Hotel.Name);
+            row1.Cells[1].Width = 220;
+            row1.Cells[2].AddParagraph().AppendText(bookingFromDb.Hotel.Price.ToString("c"));
+            row1.Cells[3].AddParagraph().AppendText(bookingFromDb.TotalCost.ToString("c"));
+            row1.Cells[3].Width = 80;
+
+            WTableStyle tableStyle = document.AddTableStyle("CustomStyle");
+
+            tableStyle.TableProperties.RowStripe = 1;
+            tableStyle.TableProperties.ColumnStripe = 2;
+            tableStyle.TableProperties.Paddings.Top = 2;
+            tableStyle.TableProperties.Paddings.Bottom = 1;
+            tableStyle.TableProperties.Paddings.Left = 5.4f;
+            tableStyle.TableProperties.Paddings.Right = 5.4f;
+
+            ConditionalFormattingStyle firstRowStyle = tableStyle.ConditionalFormattingStyles.Add(ConditionalFormattingType.FirstRow);
+            firstRowStyle.CharacterFormat.Bold = true;
+            firstRowStyle.CharacterFormat.TextColor = Color.FromArgb(255, 255, 255, 255);
+            firstRowStyle.CellProperties.BackColor = Color.Black;
+
+            table.ApplyStyle("CustomStyle");
+
+            TextBodyPart bodyPart = new(document);
+            bodyPart.BodyItems.Add(table);
+
+            document.Replace("<ADDTABLEHERE>", bodyPart, false, false);
+
+            
 
 
             MemoryStream stream = new();
