@@ -145,6 +145,29 @@ namespace HBookWeb.Controllers
             }
             //
 
+            shape = slide.Shapes.FirstOrDefault(s => s.ShapeName == "imgHotel") as IShape;
+            if (shape is not null)
+            {
+                string imageURL;
+                byte[] imageData;
+
+                try
+                {
+                    imageURL = string.Format("{0}{1}", basePath, hotelFromDb.ImageUrl);
+                    imageData = System.IO.File.ReadAllBytes(imageURL);
+                }
+                catch
+                {
+                    imageURL = string.Format("{0}{1}", basePath, "/images/placeholder.png");
+                    imageData = System.IO.File.ReadAllBytes(imageURL);
+                }
+
+                slide.Shapes.Remove(shape);
+                using MemoryStream imageStream = new(imageData);
+                IPicture picture = slide.Pictures.AddPicture(imageStream, 60, 120, 300, 200);
+            }
+
+
             MemoryStream stream = new();
             presentation.Save(stream);
             stream.Position = 0;
