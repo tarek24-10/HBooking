@@ -5,6 +5,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Stripe.BillingPortal;
 using Stripe.Checkout;
+using Syncfusion.DocIO;
+using Syncfusion.DocIO.DLS;
+using System.Reflection.Metadata;
 using System.Security.Claims;
 using Session = Stripe.Checkout.Session;
 using SessionCreateOptions = Stripe.Checkout.SessionCreateOptions;
@@ -15,9 +18,11 @@ namespace HBookWeb.Controllers
     public class BookingController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
-        public BookingController(IUnitOfWork unitOfWork)
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        public BookingController(IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment)
         {
             _unitOfWork = unitOfWork;
+            _webHostEnvironment = webHostEnvironment;
         }
 
         [Authorize]
@@ -40,6 +45,35 @@ namespace HBookWeb.Controllers
             }
 
             return View(booking);
+        }
+
+        [HttpPost]
+        public IActionResult GenerateInvoice(int id)
+        {
+            string basePath = _webHostEnvironment.WebRootPath;
+
+            string dataPath = basePath + @"/exports/BookingDetails.docx";
+
+            WordDocument document = new();
+
+            using FileStream fileStream = new(dataPath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+
+            document.Open(fileStream, FormatType.Automatic);
+
+            Booking bookingFromDb = _unitOfWork.Booking.Get(b => b.Id == id);
+
+            TextSelection textSelection = document.Find("xx_customer_name", false, true);
+            WTextRange wTextRange = textSelection.GetAsOneRange();
+            wTextRange.Text = bookingFromDb.Name;
+
+
+            MemoryStream stream = new();
+            document.Save(stream, FormatType.Docx);
+
+            stream.Position = 0;
+
+            return File(stream, "application/docx", "BookingDetails.docx");
+            
         }
 
         [Authorize]
