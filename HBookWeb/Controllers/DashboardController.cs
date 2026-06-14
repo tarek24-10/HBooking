@@ -103,5 +103,59 @@ namespace HBookWeb.Controllers
             return Json(pieChartVM);
         }
 
+        public async Task<IActionResult> GetMemberAndBookingLineChartData()
+        {
+            var bookingData = _unitOfWork.Booking.GetAll(b => b.BookingDate >= DateTime.Now.AddDays(-30)
+            && (b.Status != SD.StatusCancelled || b.Status != SD.StatusPending))
+            .GroupBy(b => b.BookingDate.Date).Select(u => new { DateTime = u.Key, NewBookingCount = u.Count() });
+
+            var CustomerData = _unitOfWork.ApplicationUser.GetAll(u => u.CreatedAt >= DateTime.Now.AddDays(-30))
+            .GroupBy(u => u.CreatedAt.Date).Select(u => new { DateTime = u.Key, NewCustomerCount = u.Count() });
+
+            var leftJoin = bookingData.GroupJoin(CustomerData, b => b.DateTime, c => c.DateTime,
+                (b, c) => new
+                {
+                    b.DateTime,
+                    b.NewBookingCount,
+                    NewCustomerCount = c.Select(c => c.NewCustomerCount).FirstOrDefault()
+                });
+
+            var rightJoin = CustomerData.GroupJoin(bookingData, c => c.DateTime, b => b.DateTime,
+                (c, b) => new
+                {
+                    c.DateTime,
+                    NewBookingCount = b.Select(b => b.NewBookingCount).FirstOrDefault(),
+                    c.NewCustomerCount,
+                });
+
+            var fullJoin = leftJoin.Union(rightJoin).OrderBy(x => x.DateTime).ToList();
+
+            var newBookingData = fullJoin.Select(x => x.NewBookingCount).ToArray();
+            var newCustomerData = fullJoin.Select(x => x.NewCustomerCount).ToArray();
+            var catageroies = fullJoin.Select(x => x.DateTime.ToString("MM/dd/yyyy")).ToArray();
+
+            List<ChartData> chartData = new()
+            {
+                new ChartData()
+                {
+                    Name = "New Bookings",
+                    Data = newBookingData
+                },
+                new ChartData()
+                {
+                     Name = "New Customers",
+                    Data = newCustomerData
+                }
+            };
+
+            var lineChartVM = new LineChartVM()
+            {
+                Catageroies = catageroies,
+                Series = chartData
+            };
+
+            return Json(lineChartVM);
+        }
+
     }
 }
