@@ -7,7 +7,9 @@ using Stripe.BillingPortal;
 using Stripe.Checkout;
 using Syncfusion.DocIO;
 using Syncfusion.DocIO.DLS;
+using Syncfusion.DocIORenderer;
 using Syncfusion.Drawing;
+using Syncfusion.Pdf;
 using System.Reflection.Metadata;
 using System.Security.Claims;
 using Session = Stripe.Checkout.Session;
@@ -49,7 +51,7 @@ namespace HBookWeb.Controllers
         }
 
         [HttpPost]
-        public IActionResult GenerateInvoice(int id)
+        public IActionResult GenerateInvoice(int id, string downloadType)
         {
             string basePath = _webHostEnvironment.WebRootPath;
 
@@ -153,16 +155,24 @@ namespace HBookWeb.Controllers
 
             document.Replace("<ADDTABLEHERE>", bodyPart, false, false);
 
-            
 
-
+            using DocIORenderer renderer = new();
             MemoryStream stream = new();
-            document.Save(stream, FormatType.Docx);
 
-            stream.Position = 0;
+            if (downloadType == "word")
+            {
+                document.Save(stream, FormatType.Docx);
+                stream.Position = 0;
 
-            return File(stream, "application/docx", "BookingDetails.docx");
-            
+                return File(stream, "application/docx", "BookingDetails.docx");
+            }
+            else
+            {
+                PdfDocument pdfDocument = renderer.ConvertToPDF(document);
+                pdfDocument.Save(stream);
+                stream.Position = 0;
+                return File(stream, "application/pdf", "BookingDetails.pdf");
+            }            
         }
 
         [Authorize]
