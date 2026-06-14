@@ -45,8 +45,6 @@ function loadPieChart(id,data) {
         }
     }
 
-    console.log("#" + id);
-
     var chart = new ApexCharts(document.querySelector("#" + id), options);
     chart.render();
 }

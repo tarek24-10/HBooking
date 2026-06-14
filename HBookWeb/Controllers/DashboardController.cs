@@ -150,7 +150,7 @@ namespace HBookWeb.Controllers
 
             var lineChartVM = new LineChartVM()
             {
-                Catageroies = catageroies,
+                Categories = catageroies,
                 Series = chartData
             };
 
