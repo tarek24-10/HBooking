@@ -112,8 +112,8 @@ namespace HBookWeb.Controllers
             table.TableFormat.Paddings.Bottom = 7f;
             table.TableFormat.Borders.Horizontal.LineWidth = 1f;
 
-
-            table.ResetCells(2, 4);
+            int rows = bookingFromDb.RoomNumber > 0 ? 3 : 2;
+            table.ResetCells(rows, 4);
 
             WTableRow row0 = table.Rows[0];
             row0.Cells[0].AddParagraph().AppendText("NIGHTS");
@@ -133,6 +133,15 @@ namespace HBookWeb.Controllers
             row1.Cells[2].AddParagraph().AppendText(bookingFromDb.Hotel.Price.ToString("c"));
             row1.Cells[3].AddParagraph().AppendText(bookingFromDb.TotalCost.ToString("c"));
             row1.Cells[3].Width = 80;
+
+            if(bookingFromDb.RoomNumber > 0)
+            {
+                WTableRow row2 = table.Rows[2];
+                row1.Cells[0].Width = 80;
+                row2.Cells[1].AddParagraph().AppendText("Room Number - " + bookingFromDb.RoomNumber.ToString());
+                row1.Cells[1].Width = 220;
+                row1.Cells[3].Width = 80;
+            }
 
             WTableStyle tableStyle = document.AddTableStyle("CustomStyle");
 
