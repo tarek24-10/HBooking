@@ -1,9 +1,12 @@
 using HBook.Application.Common.Interfaces;
+using HBook.Application.Services.Impelementation;
+using HBook.Application.Services.Interface;
 using HBook.Domain.Entities;
 using HBook.Infrastructure.Data;
 using HBook.Infrastructure.Repository;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using Stripe;
 using Syncfusion.Licensing;
 
@@ -17,6 +20,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddDefaultTokenProviders();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IDashboardService, DashboardService>();
 
 //builder.Services.ConfigureApplicationCookie(options =>
 //{

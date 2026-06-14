@@ -1,6 +1,6 @@
 ﻿namespace HBookWeb.ViewModels
 {
-    public class PieChartVM
+    public class PieChartDto
     {
         public decimal[] Series { get; set; }
         public string[] labels { get; set; }

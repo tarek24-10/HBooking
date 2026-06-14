@@ -1,4 +1,5 @@
 ﻿using HBook.Domain.Entities;
+using HBookWeb.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -52,6 +53,25 @@ namespace HBook.Application.Common.Utility
                 
             }
             return FinalAvailableRooms;
+        }
+
+        public static RadialBarChartDto GetRadialChartDataModel(int totalCount, int countByCurrentMonth, int countByPreviousMonth)
+        {
+            RadialBarChartDto radialBarChartDto = new();
+
+            int increaseDecreaseRatio = 100;
+
+            //if (countByPreviousMonth != 0)
+            //{
+            increaseDecreaseRatio = Convert.ToInt32((countByCurrentMonth - countByPreviousMonth) / (countByPreviousMonth == 0 ? 1 : countByPreviousMonth) * 100);
+            //}
+
+            radialBarChartDto.TotalCount = totalCount;
+            radialBarChartDto.CountInCurrentMonth = countByCurrentMonth;
+            radialBarChartDto.HasRatioIncreased = countByCurrentMonth > countByPreviousMonth;
+            radialBarChartDto.Series = new int[] { increaseDecreaseRatio };
+
+            return radialBarChartDto;
         }
     }
 }
