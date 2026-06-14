@@ -3,6 +3,7 @@ using HBook.Application.Common.Utility;
 using HBookWeb.Models;
 using HBookWeb.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Syncfusion.Presentation;
 using System.Diagnostics;
 
 namespace HBookWeb.Controllers
@@ -10,9 +11,11 @@ namespace HBookWeb.Controllers
     public class HomeController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
-        public HomeController(IUnitOfWork unitOfWork)
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        public HomeController(IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment)
         {
             _unitOfWork = unitOfWork;
+            _webHostEnvironment = webHostEnvironment;
         }
         public IActionResult Index()
         {
@@ -64,6 +67,75 @@ namespace HBookWeb.Controllers
         public IActionResult Error()
         {
             return View();
+        }
+
+        [HttpPost]
+        public IActionResult GeneratePPTExport(int id)
+        {
+            var hotelFromDb = _unitOfWork.Hotel.Get(h => h.Id == id);
+
+            if(hotelFromDb == null)
+            {
+                return RedirectToAction(nameof(Error));
+            }
+
+            var basePath = _webHostEnvironment.WebRootPath;
+
+            var filePath = basePath + @"/exports/ExportHotelDetails.pptx";
+
+            using IPresentation presentation = Presentation.Open(filePath);
+
+            ISlide slide = presentation.Slides[0];
+
+            IShape shape = slide.Shapes.FirstOrDefault(s => s.ShapeName == "txtHotelName") as IShape;
+
+            if(shape is not null)
+            {
+                shape.TextBody.Text = hotelFromDb.Name;
+            }
+
+            shape = slide.Shapes.FirstOrDefault(s => s.ShapeName == "txtHotelDescription") as IShape;
+
+            if(shape is not null)
+            {
+                shape.TextBody.Text = hotelFromDb.Description;
+            }
+
+            //
+            shape = slide.Shapes.FirstOrDefault(s => s.ShapeName == "txtVillaName") as IShape;
+
+            if(shape is not null)
+            {
+                shape.TextBody.Text = hotelFromDb.Name;
+            }
+            //
+
+            shape = slide.Shapes.FirstOrDefault(s => s.ShapeName == "txtOccupancy") as IShape;
+
+            if(shape is not null)
+            {
+                shape.TextBody.Text = string.Format("Max Occupancy : {0} adults", hotelFromDb.Occupancy.ToString());
+            }
+
+            shape = slide.Shapes.FirstOrDefault(s => s.ShapeName == "txtHotelSize") as IShape;
+
+            if(shape is not null)
+            {
+                shape.TextBody.Text = string.Format("Room Size : {0} sqft", hotelFromDb.Sqft.ToString());
+            }
+
+            shape = slide.Shapes.FirstOrDefault(s => s.ShapeName == "txtPricePerNight") as IShape;
+
+            if(shape is not null)
+            {
+                shape.TextBody.Text = string.Format("USD {0}/night" ,hotelFromDb.Price.ToString("c"));
+            }
+
+            MemoryStream stream = new();
+            presentation.Save(stream);
+            stream.Position = 0;
+
+            return File(stream, "application/ppt", "BookingDetails.ppt");
         }
     }
 }
