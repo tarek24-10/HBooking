@@ -33,9 +33,19 @@ namespace HBook.Infrastructure.Repository
             dbSet.Remove(entity);
         }
 
-        public T Get(Expression<Func<T, bool>> filter, string? includeproperties = null)
+        public T Get(Expression<Func<T, bool>> filter, string? includeproperties = null, bool tracked = false)
         {
-            IQueryable<T> query = dbSet;
+            IQueryable<T> query;
+
+            if(tracked)
+            {
+                query = dbSet;
+            }
+
+            else
+            {
+                query = dbSet.AsNoTracking();
+            }
 
             if (filter is not null)
             {
@@ -54,9 +64,19 @@ namespace HBook.Infrastructure.Repository
             return query.FirstOrDefault();
         }
 
-        public IEnumerable<T> GetAll(Expression<Func<T, bool>>? filter = null, string? includeproperties = null)
+        public IEnumerable<T> GetAll(Expression<Func<T, bool>>? filter = null, string? includeproperties = null, bool tracked = false)
         {
-            IQueryable<T> query = dbSet;
+            IQueryable<T> query;
+
+            if (tracked)
+            {
+                query = dbSet;
+            }
+
+            else
+            {
+                query = dbSet.AsNoTracking();
+            }
 
             if (filter is not null)
             {

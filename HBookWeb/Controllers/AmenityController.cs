@@ -90,7 +90,15 @@ namespace HBookWeb.Controllers
 
             if (ModelState.IsValid)
             {
-                _unitOfWork.Amenity.Update(amenityVM.Amenity);
+                Amenity amenity = _unitOfWork.Amenity.Get(a => a.Id == amenityVM.Amenity.Id);
+                if(amenity.Name.ToLower().Contains("special"))
+                {
+                    amenityVM.Amenity.Description = amenity.Description;
+                }
+                else
+                {
+                    _unitOfWork.Amenity.Update(amenityVM.Amenity);
+                }
                 _unitOfWork.Save();
                 TempData["success"] = "The Amenity Has been updated successfully";
                 return RedirectToAction("Index");
