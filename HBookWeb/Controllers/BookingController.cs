@@ -66,6 +66,41 @@ namespace HBookWeb.Controllers
             WTextRange wTextRange = textSelection.GetAsOneRange();
             wTextRange.Text = bookingFromDb.Name;
 
+            textSelection = document.Find("xx_customer_email", false, true);
+            wTextRange = textSelection.GetAsOneRange();
+            wTextRange.Text = bookingFromDb.Email;
+
+            textSelection = document.Find("xx_customer_phone", false, true);
+            wTextRange = textSelection.GetAsOneRange();
+            wTextRange.Text = bookingFromDb.PhoneNumber;
+
+            textSelection = document.Find("xx_payment_date", false, true);
+            wTextRange = textSelection.GetAsOneRange();
+            wTextRange.Text = bookingFromDb.PaymentDate.ToShortDateString();
+
+            textSelection = document.Find("xx_BOOKING_DATE", false, true);
+            wTextRange = textSelection.GetAsOneRange();
+            wTextRange.Text = "BOOKING DATE - " + bookingFromDb.BookingDate.ToShortDateString();
+
+
+            textSelection = document.Find("xx_checkin_date", false, true);
+            wTextRange = textSelection.GetAsOneRange();
+            wTextRange.Text = bookingFromDb.CheckInDate.ToShortDateString();
+
+
+            textSelection = document.Find("xx_checkout_date", false, true);
+            wTextRange = textSelection.GetAsOneRange();
+            wTextRange.Text = bookingFromDb.CheckOutDate.ToShortDateString();
+
+
+            textSelection = document.Find("xx_booking_total", false, true);
+            wTextRange = textSelection.GetAsOneRange();
+            wTextRange.Text = bookingFromDb.TotalCost.ToString("c");
+
+            textSelection = document.Find("xx_BOOKING_NUMBER", false, true);
+            wTextRange = textSelection.GetAsOneRange();
+            wTextRange.Text = "BOOKING NUMBER - " + bookingFromDb.Id.ToString();
+
 
             MemoryStream stream = new();
             document.Save(stream, FormatType.Docx);
