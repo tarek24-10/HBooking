@@ -72,7 +72,7 @@ namespace HBookWeb.Controllers
         [HttpPost]
         public IActionResult GeneratePPTExport(int id)
         {
-            var hotelFromDb = _unitOfWork.Hotel.Get(h => h.Id == id);
+            var hotelFromDb = _unitOfWork.Hotel.Get(h => h.Id == id, includeproperties: "Amenities");
 
             if(hotelFromDb == null)
             {
@@ -101,15 +101,6 @@ namespace HBookWeb.Controllers
                 shape.TextBody.Text = hotelFromDb.Description;
             }
 
-            //
-            shape = slide.Shapes.FirstOrDefault(s => s.ShapeName == "txtVillaName") as IShape;
-
-            if(shape is not null)
-            {
-                shape.TextBody.Text = hotelFromDb.Name;
-            }
-            //
-
             shape = slide.Shapes.FirstOrDefault(s => s.ShapeName == "txtOccupancy") as IShape;
 
             if(shape is not null)
@@ -130,6 +121,29 @@ namespace HBookWeb.Controllers
             {
                 shape.TextBody.Text = string.Format("USD {0}/night" ,hotelFromDb.Price.ToString("c"));
             }
+
+            //
+            shape = slide.Shapes.FirstOrDefault(s => s.ShapeName == "txtHotelAmenitiesHeading") as IShape;
+
+            if (shape is not null)
+            {
+                List<string> listItems = hotelFromDb.Amenities.Select(a => a.Name).ToList();
+
+                shape.TextBody.Text = "";
+
+                foreach(var item in listItems)
+                {
+                    //shape.TextBody.Text += item + "\n";
+                    IParagraph paragraph = shape.TextBody.AddParagraph();
+                    ITextPart textPart = paragraph.AddTextPart(item);
+                    paragraph.ListFormat.Type = ListType.Bulleted;
+                    paragraph.ListFormat.BulletCharacter = '\u2022';
+                    textPart.Font.FontName = "system-ui";
+                    textPart.Font.FontSize = 18;
+                    textPart.Font.Color = ColorObject.FromArgb(144, 148, 152);
+                }
+            }
+            //
 
             MemoryStream stream = new();
             presentation.Save(stream);
