@@ -109,6 +109,10 @@
                     <partial name="_HotelDetails" model="hotel"></partial>
                     </div>
                     <div class="modal-footer">
+                         <button asp-controller="Home" asp-action="GeneratePPTExport" 
+                                        asp-route-id="@hotel.Id" type="submit" class="btn btn-outline-warning">
+                                    <i class="bi bi-file-earmark-ppt">Download Hotel PPT </i>
+                                    </button>
                         <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Close</button>
                     </div>
 
