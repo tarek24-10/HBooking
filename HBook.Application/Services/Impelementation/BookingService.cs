@@ -61,7 +61,7 @@ namespace HBook.Application.Services.Impelementation
 
         public void UpdateBookingStatus(int bookingId, string BookingStatus, int roomNumber)
         {
-            var booking = _unitOfWork.Booking.Get(b => b.Id == bookingId);
+            var booking = _unitOfWork.Booking.Get(b => b.Id == bookingId, tracked:true);
             if (booking != null)
             {
                 booking.Status = BookingStatus;
@@ -80,7 +80,7 @@ namespace HBook.Application.Services.Impelementation
 
         public void UpdateStripePaymentId(int bookingId, string sessionId, string stripeIntentId)
         {
-            var booking = _unitOfWork.Booking.Get(b => b.Id == bookingId);
+            var booking = _unitOfWork.Booking.Get(b => b.Id == bookingId, tracked:true);
             if (!string.IsNullOrEmpty(sessionId))
             {
                 booking.StripeSessionId = sessionId;
