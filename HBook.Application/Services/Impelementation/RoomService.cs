@@ -1,10 +1,6 @@
 ﻿using HBook.Application.Common.Interfaces;
 using HBook.Application.Services.Interface;
 using HBook.Domain.Entities;
-using Microsoft.AspNetCore.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace HBook.Application.Services.Impelementation
 {
@@ -48,7 +44,7 @@ namespace HBook.Application.Services.Impelementation
 
         public IEnumerable<Room> GetAllRooms()
         {
-            return _unitOfWork.Room.GetAll(includeproperties:"Hotel");
+            return _unitOfWork.Room.GetAll(includeproperties: "Hotel");
         }
 
         public Room GetRoomById(int id)

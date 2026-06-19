@@ -3,13 +3,10 @@ using HBook.Application.Common.Utility;
 using HBook.Application.Services.Interface;
 using HBook.Domain.Entities;
 using Microsoft.AspNetCore.Hosting;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace HBook.Application.Services.Impelementation
 {
-    public class HotelService:IHotelService
+    public class HotelService : IHotelService
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IWebHostEnvironment _webHostEnvironment;

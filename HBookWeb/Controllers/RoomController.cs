@@ -1,11 +1,7 @@
-﻿using HBook.Application.Common.Interfaces;
-using HBook.Application.Services.Interface;
-using HBook.Domain.Entities;
-using HBook.Infrastructure.Data;
+﻿using HBook.Application.Services.Interface;
 using HBookWeb.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 
 namespace HBookWeb.Controllers
 {

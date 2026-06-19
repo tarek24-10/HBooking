@@ -1,19 +1,16 @@
-﻿using HBook.Application.Common.Interfaces;
-using HBook.Application.Common.Utility;
+﻿using HBook.Application.Common.Utility;
 using HBook.Application.Contract;
 using HBook.Application.Services.Interface;
 using HBook.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Stripe.BillingPortal;
 using Stripe.Checkout;
 using Syncfusion.DocIO;
 using Syncfusion.DocIO.DLS;
 using Syncfusion.DocIORenderer;
 using Syncfusion.Drawing;
 using Syncfusion.Pdf;
-using System.Reflection.Metadata;
 using System.Security.Claims;
 using Session = Stripe.Checkout.Session;
 using SessionCreateOptions = Stripe.Checkout.SessionCreateOptions;
@@ -29,8 +26,8 @@ namespace HBookWeb.Controllers
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IEmailService _emailService;
-        public BookingController(IBookingService bookingService, IHotelService hotelService, 
-            IRoomService roomService, IWebHostEnvironment webHostEnvironment, 
+        public BookingController(IBookingService bookingService, IHotelService hotelService,
+            IRoomService roomService, IWebHostEnvironment webHostEnvironment,
             UserManager<ApplicationUser> userManager, IEmailService emailService)
         {
             _bookingService = bookingService;
@@ -146,7 +143,7 @@ namespace HBookWeb.Controllers
             row1.Cells[3].AddParagraph().AppendText(bookingFromDb.TotalCost.ToString("c"));
             row1.Cells[3].Width = 80;
 
-            if(bookingFromDb.RoomNumber > 0)
+            if (bookingFromDb.RoomNumber > 0)
             {
                 WTableRow row2 = table.Rows[2];
                 row1.Cells[0].Width = 80;
@@ -193,7 +190,7 @@ namespace HBookWeb.Controllers
                 pdfDocument.Save(stream);
                 stream.Position = 0;
                 return File(stream, "application/pdf", "BookingDetails.pdf");
-            }            
+            }
         }
 
         [Authorize]
@@ -235,9 +232,13 @@ namespace HBookWeb.Controllers
             if (!_hotelService.IsAvailableByDate(hotel.Id, booking.Nights, booking.CheckInDate))
             {
                 TempData["error"] = "Room has been sold out.";
-                return RedirectToAction(nameof(FinalizeBooking), 
-                new { HotelId = booking.HotelId, CheckIn = booking.CheckInDate.ToString("yyyy-MM-dd"), 
-                    Nights = booking.Nights });
+                return RedirectToAction(nameof(FinalizeBooking),
+                new
+                {
+                    HotelId = booking.HotelId,
+                    CheckIn = booking.CheckInDate.ToString("yyyy-MM-dd"),
+                    Nights = booking.Nights
+                });
             }
             //
 
@@ -304,7 +305,7 @@ namespace HBookWeb.Controllers
             IEnumerable<Booking> bookings;
 
             string userId = "";
-            if(string.IsNullOrEmpty(status))
+            if (string.IsNullOrEmpty(status))
             {
                 status = "";
             }
@@ -343,7 +344,7 @@ namespace HBookWeb.Controllers
 
         [HttpPost]
         [Authorize(Roles = SD.Role_Admin)]
-        public IActionResult CheckIN (Booking booking)
+        public IActionResult CheckIN(Booking booking)
         {
             _bookingService.UpdateBookingStatus(booking.Id, SD.StatusCheckedIn, booking.RoomNumber);
             TempData["success"] = "Booking checked in successfully.";
@@ -352,7 +353,7 @@ namespace HBookWeb.Controllers
 
         [HttpPost]
         [Authorize(Roles = SD.Role_Admin)]
-        public IActionResult CheckOut (Booking booking)
+        public IActionResult CheckOut(Booking booking)
         {
             _bookingService.UpdateBookingStatus(booking.Id, SD.StatusCompleted, booking.RoomNumber);
             TempData["success"] = "Booking checked out successfully.";
@@ -361,7 +362,7 @@ namespace HBookWeb.Controllers
 
         [HttpPost]
         [Authorize(Roles = SD.Role_Admin)]
-        public IActionResult CancelBooking (Booking booking)
+        public IActionResult CancelBooking(Booking booking)
         {
             _bookingService.UpdateBookingStatus(booking.Id, SD.StatusCancelled, 0);
             TempData["success"] = "Booking cancelled successfully.";

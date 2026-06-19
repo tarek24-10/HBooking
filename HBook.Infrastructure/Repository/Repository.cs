@@ -1,11 +1,7 @@
 ﻿using HBook.Application.Common.Interfaces;
-using HBook.Domain.Entities;
 using HBook.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
 using System.Linq.Expressions;
-using System.Text;
 
 namespace HBook.Infrastructure.Repository
 {
@@ -37,7 +33,7 @@ namespace HBook.Infrastructure.Repository
         {
             IQueryable<T> query;
 
-            if(tracked)
+            if (tracked)
             {
                 query = dbSet;
             }

@@ -3,9 +3,6 @@ using HBook.Application.Common.Utility;
 using HBook.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace HBook.Infrastructure.Data
 {
@@ -25,7 +22,7 @@ namespace HBook.Infrastructure.Data
         {
             try
             {
-                if(_context.Database.GetPendingMigrations().Count() > 0)
+                if (_context.Database.GetPendingMigrations().Count() > 0)
                 {
                     _context.Database.Migrate();
                 }

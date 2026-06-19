@@ -9,8 +9,8 @@ namespace HBookWeb.ViewModels
     {
         public Room Room { get; set; }
 
-        [Display (Name = "Hotel List")]
+        [Display(Name = "Hotel List")]
         [ValidateNever]
-        public IEnumerable<SelectListItem>? HotelList { get; set;}
+        public IEnumerable<SelectListItem>? HotelList { get; set; }
     }
 }

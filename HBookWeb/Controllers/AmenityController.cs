@@ -1,5 +1,4 @@
-﻿using HBook.Application.Common.Interfaces;
-using HBook.Application.Common.Utility;
+﻿using HBook.Application.Common.Utility;
 using HBook.Application.Services.Interface;
 using HBook.Domain.Entities;
 using HBookWeb.ViewModels;
@@ -92,7 +91,7 @@ namespace HBookWeb.Controllers
             if (ModelState.IsValid)
             {
                 Amenity amenity = _amenityService.GetAmenityById(amenityVM.Amenity.Id);
-                if(amenity.Name.ToLower().Contains("special"))
+                if (amenity.Name.ToLower().Contains("special"))
                 {
                     amenityVM.Amenity.Description = amenity.Description;
                 }

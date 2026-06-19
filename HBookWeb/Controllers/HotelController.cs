@@ -1,9 +1,5 @@
-﻿using HBook.Application.Common.Interfaces;
-using HBook.Application.Common.Utility;
-using HBook.Application.Services.Impelementation;
-using HBook.Application.Services.Interface;
+﻿using HBook.Application.Services.Interface;
 using HBook.Domain.Entities;
-using HBook.Infrastructure.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 

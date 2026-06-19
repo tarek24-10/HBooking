@@ -1,8 +1,5 @@
 ﻿using HBook.Domain.Entities;
 using HBookWeb.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace HBook.Application.Common.Utility
 {
@@ -18,21 +15,21 @@ namespace HBook.Application.Common.Utility
         public const string StatusRefunded = "Refunded";
 
         public static int HotelRoomsAvailable_Count(int hotelId, List<Room> roomList, List<Booking> bookingList,
-            DateOnly checkInDate, int nights) 
-        { 
+            DateOnly checkInDate, int nights)
+        {
             var FinalAvailableRooms = int.MaxValue;
             List<int> BookingsINDate = new List<int>();
 
             var RoomsInHotel = roomList.Where(r => r.HotelId == hotelId).Count();
 
-            for (int i = 0 ; i < nights; i++)
+            for (int i = 0; i < nights; i++)
             {
-                var roomsBooked = bookingList.Where(b => b.HotelId == hotelId 
-                && b.CheckInDate <= checkInDate.AddDays(i) 
+                var roomsBooked = bookingList.Where(b => b.HotelId == hotelId
+                && b.CheckInDate <= checkInDate.AddDays(i)
                 && b.CheckOutDate > checkInDate.AddDays(i));
                 foreach (var booking in roomsBooked)
                 {
-                    if(!BookingsINDate.Contains(booking.Id))
+                    if (!BookingsINDate.Contains(booking.Id))
                     {
                         BookingsINDate.Add(booking.Id);
                     }
@@ -50,7 +47,7 @@ namespace HBook.Application.Common.Utility
                         FinalAvailableRooms = totalAvailableRooms;
                     }
                 }
-                
+
             }
             return FinalAvailableRooms;
         }
