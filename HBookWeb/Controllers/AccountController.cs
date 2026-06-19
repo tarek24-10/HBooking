@@ -1,5 +1,4 @@
-﻿using HBook.Application.Common.Interfaces;
-using HBook.Application.Common.Utility;
+﻿using HBook.Application.Common.Utility;
 using HBook.Domain.Entities;
 using HBookWeb.ViewModels;
 using Microsoft.AspNetCore.Identity;
@@ -139,7 +138,7 @@ namespace HBookWeb.Controllers
 
             return View(loginVM);
         }
-       
+
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();

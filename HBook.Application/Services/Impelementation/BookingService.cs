@@ -2,11 +2,6 @@
 using HBook.Application.Common.Utility;
 using HBook.Application.Services.Interface;
 using HBook.Domain.Entities;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace HBook.Application.Services.Impelementation
 {
@@ -27,9 +22,9 @@ namespace HBook.Application.Services.Impelementation
         public IEnumerable<Booking> GetAllBookings(string userId = "", string? statusFilterList = "")
         {
             IEnumerable<string> statusList = statusFilterList.ToLower().Split(",");
-            if(!string.IsNullOrEmpty(userId) && !string.IsNullOrEmpty(statusFilterList))
+            if (!string.IsNullOrEmpty(userId) && !string.IsNullOrEmpty(statusFilterList))
             {
-                return _unitOfWork.Booking.GetAll(b => statusList.Contains(b.Status.ToLower()) 
+                return _unitOfWork.Booking.GetAll(b => statusList.Contains(b.Status.ToLower())
                 && b.UserId == userId, includeproperties: "Hotel,User");
             }
             else if (!string.IsNullOrEmpty(statusFilterList))
@@ -61,7 +56,7 @@ namespace HBook.Application.Services.Impelementation
 
         public void UpdateBookingStatus(int bookingId, string BookingStatus, int roomNumber)
         {
-            var booking = _unitOfWork.Booking.Get(b => b.Id == bookingId, tracked:true);
+            var booking = _unitOfWork.Booking.Get(b => b.Id == bookingId, tracked: true);
             if (booking != null)
             {
                 booking.Status = BookingStatus;
@@ -80,7 +75,7 @@ namespace HBook.Application.Services.Impelementation
 
         public void UpdateStripePaymentId(int bookingId, string sessionId, string stripeIntentId)
         {
-            var booking = _unitOfWork.Booking.Get(b => b.Id == bookingId, tracked:true);
+            var booking = _unitOfWork.Booking.Get(b => b.Id == bookingId, tracked: true);
             if (!string.IsNullOrEmpty(sessionId))
             {
                 booking.StripeSessionId = sessionId;

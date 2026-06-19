@@ -2,9 +2,6 @@
 using HBook.Application.Common.Utility;
 using HBook.Application.Services.Interface;
 using HBookWeb.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace HBook.Application.Services.Impelementation
 {

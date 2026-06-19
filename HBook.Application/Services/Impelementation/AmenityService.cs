@@ -1,9 +1,6 @@
 ﻿using HBook.Application.Common.Interfaces;
 using HBook.Application.Services.Interface;
 using HBook.Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace HBook.Application.Services.Impelementation
 {

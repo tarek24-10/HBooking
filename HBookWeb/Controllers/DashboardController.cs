@@ -1,8 +1,4 @@
-﻿using HBook.Application.Common.Interfaces;
-using HBook.Application.Common.Utility;
-using HBook.Application.Services.Impelementation;
-using HBook.Application.Services.Interface;
-using HBookWeb.ViewModels;
+﻿using HBook.Application.Services.Interface;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HBookWeb.Controllers
@@ -21,7 +17,7 @@ namespace HBookWeb.Controllers
         }
 
         public async Task<IActionResult> GetTotalBookingRadialChartData()
-        { 
+        {
             return Json(await _dashboardService.GetTotalBookingRadialChartData());
         }
 

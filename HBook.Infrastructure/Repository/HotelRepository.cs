@@ -1,18 +1,10 @@
 ﻿using HBook.Application.Common.Interfaces;
 using HBook.Domain.Entities;
 using HBook.Infrastructure.Data;
-using Microsoft.EntityFrameworkCore;
-using System.Linq;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
-using System.Text;
-using System.Linq;
 
 namespace HBook.Infrastructure.Repository
 {
-    public class HotelRepository : Repository<Hotel>,IHotelRepository
+    public class HotelRepository : Repository<Hotel>, IHotelRepository
     {
         private readonly ApplicationDbContext _context;
         public HotelRepository(ApplicationDbContext context) : base(context)

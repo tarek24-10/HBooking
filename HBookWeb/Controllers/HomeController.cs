@@ -1,12 +1,7 @@
-using HBook.Application.Common.Interfaces;
-using HBook.Application.Common.Utility;
-using HBook.Application.Services.Impelementation;
 using HBook.Application.Services.Interface;
-using HBookWeb.Models;
 using HBookWeb.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Syncfusion.Presentation;
-using System.Diagnostics;
 
 namespace HBookWeb.Controllers
 {
@@ -33,10 +28,10 @@ namespace HBookWeb.Controllers
 
         [HttpPost]
 
-        public IActionResult GetHotelByDate (int nights, DateOnly checkInDate)
+        public IActionResult GetHotelByDate(int nights, DateOnly checkInDate)
         {
             //Thread.Sleep(250);
-            
+
             HomeVM homeVM = new HomeVM()
             {
                 HotelList = _hotelService.GetAvailableHotelsByDate(nights, checkInDate),
@@ -44,7 +39,7 @@ namespace HBookWeb.Controllers
                 Nights = nights
             };
 
-            return PartialView("_HotelList" ,homeVM);
+            return PartialView("_HotelList", homeVM);
         }
 
         public IActionResult Privacy()
@@ -63,7 +58,7 @@ namespace HBookWeb.Controllers
         {
             var hotelFromDb = _hotelService.GetHotelById(id);
 
-            if(hotelFromDb == null)
+            if (hotelFromDb == null)
             {
                 return RedirectToAction(nameof(Error));
             }
@@ -78,37 +73,37 @@ namespace HBookWeb.Controllers
 
             IShape shape = slide.Shapes.FirstOrDefault(s => s.ShapeName == "txtHotelName") as IShape;
 
-            if(shape is not null)
+            if (shape is not null)
             {
                 shape.TextBody.Text = hotelFromDb.Name;
             }
 
             shape = slide.Shapes.FirstOrDefault(s => s.ShapeName == "txtHotelDescription") as IShape;
 
-            if(shape is not null)
+            if (shape is not null)
             {
                 shape.TextBody.Text = hotelFromDb.Description;
             }
 
             shape = slide.Shapes.FirstOrDefault(s => s.ShapeName == "txtOccupancy") as IShape;
 
-            if(shape is not null)
+            if (shape is not null)
             {
                 shape.TextBody.Text = string.Format("Max Occupancy : {0} adults", hotelFromDb.Occupancy.ToString());
             }
 
             shape = slide.Shapes.FirstOrDefault(s => s.ShapeName == "txtHotelSize") as IShape;
 
-            if(shape is not null)
+            if (shape is not null)
             {
                 shape.TextBody.Text = string.Format("Room Size : {0} sqft", hotelFromDb.Sqft.ToString());
             }
 
             shape = slide.Shapes.FirstOrDefault(s => s.ShapeName == "txtPricePerNight") as IShape;
 
-            if(shape is not null)
+            if (shape is not null)
             {
-                shape.TextBody.Text = string.Format("USD {0}/night" ,hotelFromDb.Price.ToString("c"));
+                shape.TextBody.Text = string.Format("USD {0}/night", hotelFromDb.Price.ToString("c"));
             }
 
             //
@@ -120,7 +115,7 @@ namespace HBookWeb.Controllers
 
                 shape.TextBody.Text = "";
 
-                foreach(var item in listItems)
+                foreach (var item in listItems)
                 {
                     //shape.TextBody.Text += item + "\n";
                     IParagraph paragraph = shape.TextBody.AddParagraph();
