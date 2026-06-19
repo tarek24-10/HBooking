@@ -1,5 +1,6 @@
 ﻿using HBook.Application.Common.Interfaces;
 using HBook.Application.Common.Utility;
+using HBook.Application.Contract;
 using HBook.Application.Services.Interface;
 using HBook.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
@@ -27,14 +28,17 @@ namespace HBookWeb.Controllers
         private readonly IRoomService _roomService;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IEmailService _emailService;
         public BookingController(IBookingService bookingService, IHotelService hotelService, 
-            IRoomService roomService, IWebHostEnvironment webHostEnvironment, UserManager<ApplicationUser> userManager)
+            IRoomService roomService, IWebHostEnvironment webHostEnvironment, 
+            UserManager<ApplicationUser> userManager, IEmailService emailService)
         {
             _bookingService = bookingService;
             _hotelService = hotelService;
             _roomService = roomService;
             _webHostEnvironment = webHostEnvironment;
             _userManager = userManager;
+            _emailService = emailService;
         }
 
         [Authorize]
@@ -285,6 +289,7 @@ namespace HBookWeb.Controllers
             {
                 _bookingService.UpdateBookingStatus(booking.Id, SD.StatusApproved, 0);
                 _bookingService.UpdateStripePaymentId(booking.Id, booking.StripeSessionId, session.PaymentIntentId);
+                _emailService.SendEmailAsync(booking.Email, "<p>Booking Confirmation - HBook", "Your Booking has been confirmed. Booking Id - " + booking.Id + "</p>").GetAwaiter().GetResult();
             }
 
 
