@@ -1,4 +1,5 @@
-﻿using HBook.Application.Common.Interfaces;
+﻿using Bogus;
+using HBook.Application.Common.Interfaces;
 using HBook.Application.Common.Utility;
 using HBook.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
@@ -51,6 +52,100 @@ namespace HBook.Infrastructure.Data
             {
                 throw;
             }
+        }
+
+        public void Seed()
+        {
+            if (_context.Hotels.Any())
+                return;
+
+            //-----------------------------------
+            // Hotels
+            //-----------------------------------
+            var hotelFaker = new Faker<Hotel>()
+                .RuleFor(h => h.Name, f => $"{f.Company.CompanyName()} Hotel")
+                .RuleFor(h => h.Description, f => f.Lorem.Sentence())
+                .RuleFor(h => h.Price, f => f.Random.Double(100, 500))
+                .RuleFor(h => h.Sqft, f => f.Random.Int(500, 1500))
+                .RuleFor(h => h.Occupancy, f => f.Random.Int(1, 5))
+                .RuleFor(h => h.ImageUrl,
+                    f => $"https://picsum.photos/seed/{f.Random.Int(1, 1000)}/800/500")
+                .RuleFor(h => h.CreatedDate, f => DateTime.Now)
+                .RuleFor(h => h.ModifiedDate, f => DateTime.Now);
+
+            var hotels = hotelFaker.Generate(3);
+
+            _context.Hotels.AddRange(hotels);
+            _context.SaveChanges();
+
+
+            //-----------------------------------
+            // Rooms
+            //-----------------------------------
+            var roomFaker = new Faker<Room>()
+                .RuleFor(r => r.SpecialDetails,
+                    f => f.PickRandom(
+                        "Sea View",
+                        "King Bed",
+                        "Balcony",
+                        "Mini Bar",
+                        "Free Breakfast"));
+
+            var rooms = new List<Room>();
+
+            foreach (var hotel in hotels)
+            {
+                int roomCount = Random.Shared.Next(2, 5);
+
+                for (int i = 1; i <= roomCount; i++)
+                {
+                    rooms.Add(new Room
+                    {
+                        HotelId = hotel.Id,
+                        RoomNumber = hotel.Id * 100 + i,
+                        SpecialDetails = roomFaker.Generate().SpecialDetails
+                    });
+                }
+            }
+
+            _context.Rooms.AddRange(rooms);
+            _context.SaveChanges();
+
+
+            //-----------------------------------
+            // Amenities
+            //-----------------------------------
+            string[] amenityNames =
+            {
+            "Free WiFi",
+            "Swimming Pool",
+            "Gym",
+            "Parking",
+            "Spa"
+        };
+
+            var amenities = new List<Amenity>();
+
+            foreach (var hotel in hotels)
+            {
+                var selectedAmenities = amenityNames
+                    .OrderBy(x => Guid.NewGuid())
+                    .Take(Random.Shared.Next(2, 4));
+
+                foreach (var name in selectedAmenities)
+                {
+                    amenities.Add(new Amenity
+                    {
+                        HotelId = hotel.Id,
+                        Name = name,
+                        Description = $"{name} available for guests."
+                    });
+                }
+            }
+
+            _context.Amenities.AddRange(amenities);
+
+            _context.SaveChanges();
         }
     }
 }
