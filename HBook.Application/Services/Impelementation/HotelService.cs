@@ -69,12 +69,12 @@ namespace HBook.Application.Services.Impelementation
 
         public IEnumerable<Hotel> GetAllHotels()
         {
-            return _unitOfWork.Hotel.GetAll();
+            return _unitOfWork.Hotel.GetAll(includeproperties: "Amenities");
         }
 
         public Hotel GetHotelById(int id)
         {
-            return _unitOfWork.Hotel.Get(h => h.Id == id);
+            return _unitOfWork.Hotel.Get(h => h.Id == id, includeproperties: "Amenities");
         }
 
         public void UpdateHotel(Hotel hotel)
