@@ -21,38 +21,5 @@ namespace HBook.Infrastructure.Repository
             _context.Update(entity);
         }
 
-        public void UpdateBookingStatus(int bookingId, string BookingStatus, int roomNumber)
-        {
-            var booking = _context.Bookings.Find(bookingId);
-            if (booking != null)
-            {
-                booking.Status = BookingStatus;
-                if(BookingStatus == SD.StatusCheckedIn)
-                {
-                    booking.RoomNumber = roomNumber;
-                    booking.ActualCheckInDate = DateTime.Now;
-                }
-                else if (BookingStatus == SD.StatusCompleted)
-                {
-                    booking.ActualCheckOutDate = DateTime.Now;
-                }
-            }
-        }
-
-        public void UpdateStripePaymentId(int bookingId, string sessionId, string stripeIntentId)
-        {
-            var booking = _context.Bookings.Find(bookingId);
-            if (!string.IsNullOrEmpty(sessionId))
-            {
-                booking.StripeSessionId = sessionId;
-            }
-            if (!string.IsNullOrEmpty(stripeIntentId))
-            {
-                booking.StripePaymentIntentId = stripeIntentId;
-                booking.PaymentDate = DateTime.Now;
-                booking.IsPaymentSuccessful = true;
-            }
-        }
-
     }
 }

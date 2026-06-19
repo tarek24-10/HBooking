@@ -125,5 +125,16 @@ namespace HBook.Application.Services.Impelementation
             _unitOfWork.Hotel.Update(hotel);
             _unitOfWork.Save();
         }
+
+        public bool IsAvailableByDate(int hotelId, int nights, DateOnly checkInDate)
+        {
+            var roomList = _unitOfWork.Room.GetAll().ToList();
+            var bookings = _unitOfWork.Booking.GetAll(b => b.Status == SD.StatusApproved
+            || b.Status == SD.StatusCheckedIn).ToList();
+
+
+            int roomsAvailable = SD.HotelRoomsAvailable_Count(hotelId, roomList, bookings, checkInDate, nights);
+            return roomsAvailable > 0;
+        }
     }
 }

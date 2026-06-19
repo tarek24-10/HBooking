@@ -13,12 +13,10 @@ namespace HBookWeb.Controllers
     public class HomeController : Controller
     {
         private readonly IHotelService _hotelService;
-        private readonly IRoomService _roomService;
         private readonly IWebHostEnvironment _webHostEnvironment;
-        public HomeController(IHotelService hotelService,IRoomService roomService, IWebHostEnvironment webHostEnvironment)
+        public HomeController(IHotelService hotelService, IWebHostEnvironment webHostEnvironment)
         {
             _hotelService = hotelService;
-            _roomService = roomService;
             _webHostEnvironment = webHostEnvironment;
         }
         public IActionResult Index()

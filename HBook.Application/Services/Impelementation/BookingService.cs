@@ -1,4 +1,5 @@
 ﻿using HBook.Application.Common.Interfaces;
+using HBook.Application.Common.Utility;
 using HBook.Application.Services.Interface;
 using HBook.Domain.Entities;
 using Microsoft.AspNetCore.Hosting;
@@ -51,6 +52,46 @@ namespace HBook.Application.Services.Impelementation
         public Booking GetBookingById(int id)
         {
             return _unitOfWork.Booking.Get(b => b.Id == id, includeproperties: "Hotel,User");
+        }
+
+        public IEnumerable<int> GetCheckedInRoomNumbers(int hotelId)
+        {
+            return _unitOfWork.Booking.GetAll(b => b.HotelId == hotelId && b.Status == SD.StatusCheckedIn).Select(b => b.RoomNumber);
+        }
+
+        public void UpdateBookingStatus(int bookingId, string BookingStatus, int roomNumber)
+        {
+            var booking = _unitOfWork.Booking.Get(b => b.Id == bookingId);
+            if (booking != null)
+            {
+                booking.Status = BookingStatus;
+                if (BookingStatus == SD.StatusCheckedIn)
+                {
+                    booking.RoomNumber = roomNumber;
+                    booking.ActualCheckInDate = DateTime.Now;
+                }
+                else if (BookingStatus == SD.StatusCompleted)
+                {
+                    booking.ActualCheckOutDate = DateTime.Now;
+                }
+            }
+            _unitOfWork.Save();
+        }
+
+        public void UpdateStripePaymentId(int bookingId, string sessionId, string stripeIntentId)
+        {
+            var booking = _unitOfWork.Booking.Get(b => b.Id == bookingId);
+            if (!string.IsNullOrEmpty(sessionId))
+            {
+                booking.StripeSessionId = sessionId;
+            }
+            if (!string.IsNullOrEmpty(stripeIntentId))
+            {
+                booking.StripePaymentIntentId = stripeIntentId;
+                booking.PaymentDate = DateTime.Now;
+                booking.IsPaymentSuccessful = true;
+            }
+            _unitOfWork.Save();
         }
     }
 }
