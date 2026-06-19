@@ -1,5 +1,6 @@
 ﻿using HBook.Application.Common.Interfaces;
 using HBook.Application.Common.Utility;
+using HBook.Application.Services.Interface;
 using HBook.Domain.Entities;
 using HBookWeb.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -11,16 +12,17 @@ namespace HBookWeb.Controllers
     [Authorize(Roles = SD.Role_Admin)]
     public class AmenityController : Controller
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IAmenityService _amenityService;
+        private readonly IHotelService _hotelService;
 
-        public AmenityController(IUnitOfWork unitOfWork)
+        public AmenityController(IAmenityService amenityService, IHotelService hotelService)
         {
-            _unitOfWork = unitOfWork;
+            _hotelService = hotelService;
         }
 
         public IActionResult Index()
         {
-            var amenities = _unitOfWork.Amenity.GetAll(includeproperties: "Hotel");
+            var amenities = _amenityService.GetAllAmenities();
             return View(amenities);
         }
 
@@ -28,7 +30,7 @@ namespace HBookWeb.Controllers
         {
             AmenityVM amenityVM = new AmenityVM()
             {
-                HotelList = _unitOfWork.Hotel.GetAll().Select(h => new SelectListItem
+                HotelList = _hotelService.GetAllHotels().Select(h => new SelectListItem
                 {
                     Text = h.Name,
                     Value = h.Id.ToString()
@@ -44,8 +46,7 @@ namespace HBookWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                _unitOfWork.Amenity.Add(amenityVM.Amenity);
-                _unitOfWork.Save();
+                _amenityService.CreateAmenity(amenityVM.Amenity);
                 TempData["success"] = "The Amenity Has been created successfully";
                 return RedirectToAction("Index");
             }
@@ -55,7 +56,7 @@ namespace HBookWeb.Controllers
                 TempData["error"] = "The Amenity could not be created";
             }
 
-            amenityVM.HotelList = _unitOfWork.Hotel.GetAll().Select(h => new SelectListItem
+            amenityVM.HotelList = _hotelService.GetAllHotels().Select(h => new SelectListItem
             {
                 Text = h.Name,
                 Value = h.Id.ToString()
@@ -68,8 +69,8 @@ namespace HBookWeb.Controllers
         {
             AmenityVM amenityVM = new()
             {
-                Amenity = _unitOfWork.Amenity.Get(a => a.Id == Id),
-                HotelList = _unitOfWork.Hotel.GetAll().Select(h => new SelectListItem
+                Amenity = _amenityService.GetAmenityById(Id),
+                HotelList = _hotelService.GetAllHotels().Select(h => new SelectListItem
                 {
                     Text = h.Name,
                     Value = h.Id.ToString()
@@ -90,16 +91,15 @@ namespace HBookWeb.Controllers
 
             if (ModelState.IsValid)
             {
-                Amenity amenity = _unitOfWork.Amenity.Get(a => a.Id == amenityVM.Amenity.Id);
+                Amenity amenity = _amenityService.GetAmenityById(amenityVM.Amenity.Id);
                 if(amenity.Name.ToLower().Contains("special"))
                 {
                     amenityVM.Amenity.Description = amenity.Description;
                 }
                 else
                 {
-                    _unitOfWork.Amenity.Update(amenityVM.Amenity);
+                    _amenityService.UpdateAmenity(amenityVM.Amenity);
                 }
-                _unitOfWork.Save();
                 TempData["success"] = "The Amenity Has been updated successfully";
                 return RedirectToAction("Index");
             }
@@ -107,7 +107,7 @@ namespace HBookWeb.Controllers
 
             TempData["error"] = "The Amenity could not be created";
 
-            amenityVM.HotelList = _unitOfWork.Hotel.GetAll().Select(h => new SelectListItem
+            amenityVM.HotelList = _hotelService.GetAllHotels().Select(h => new SelectListItem
             {
                 Text = h.Name,
                 Value = h.Id.ToString()
@@ -120,8 +120,8 @@ namespace HBookWeb.Controllers
         {
             AmenityVM amenityVM = new()
             {
-                Amenity = _unitOfWork.Amenity.Get(a => a.Id == Id),
-                HotelList = _unitOfWork.Hotel.GetAll().Select(h => new SelectListItem
+                Amenity = _amenityService.GetAmenityById(Id),
+                HotelList = _hotelService.GetAllHotels().Select(h => new SelectListItem
                 {
                     Text = h.Name,
                     Value = h.Id.ToString()
@@ -139,18 +139,20 @@ namespace HBookWeb.Controllers
         [HttpPost]
         public IActionResult Delete(AmenityVM amenityVM)
         {
-            var objFromDB = _unitOfWork.Amenity.Get(r => r.Id == amenityVM.Amenity.Id);
+            var objFromDB = _amenityService.GetAmenityById(amenityVM.Amenity.Id);
             if (objFromDB is not null)
             {
-                _unitOfWork.Amenity.Delete(objFromDB);
-                _unitOfWork.Save();
-                TempData["success"] = "The Amenity Has been deleted successfully";
-                return RedirectToAction("Index");
+                var isdeleted = _amenityService.DeleteAmenity(objFromDB.Id);
+                if (isdeleted)
+                {
+                    TempData["success"] = "The Amenity Has been deleted successfully";
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    TempData["error"] = "The Amenity could not be deleted";
+                }
             }
-
-
-            TempData["error"] = "The Amenity could not be deleted";
-
             return View(amenityVM);
         }
     }

@@ -152,13 +152,17 @@ namespace HBookWeb.Controllers
             var objFromDB = _roomService.GetRoomById(roomVM.Room.Id);
             if (objFromDB is not null)
             {
-                _roomService.DeleteRoom(objFromDB.Id);
-                TempData["success"] = "The Room Has been deleted successfully";
-                return RedirectToAction("Index");
+                var isdeleted = _roomService.DeleteRoom(objFromDB.Id);
+                if (isdeleted)
+                {
+                    TempData["success"] = "The Room Has been deleted successfully";
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    TempData["error"] = "The Room could not be deleted";
+                }
             }
-
-
-            TempData["error"] = "The Room could not be deleted";
 
             return View(roomVM);
         }
