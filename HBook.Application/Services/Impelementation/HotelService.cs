@@ -1,4 +1,5 @@
 ﻿using HBook.Application.Common.Interfaces;
+using HBook.Application.Common.Utility;
 using HBook.Application.Services.Interface;
 using HBook.Domain.Entities;
 using Microsoft.AspNetCore.Hosting;
@@ -70,6 +71,26 @@ namespace HBook.Application.Services.Impelementation
         public IEnumerable<Hotel> GetAllHotels()
         {
             return _unitOfWork.Hotel.GetAll(includeproperties: "Amenities");
+        }
+
+        public IEnumerable<Hotel> GetAvailableHotelsByDate(int nights, DateOnly checkInDate)
+        {
+            var hotelList = _unitOfWork.Hotel.GetAll(includeproperties: "Amenities");
+            var roomList = _unitOfWork.Room.GetAll(includeproperties: "Hotel").ToList();
+            var bookings = _unitOfWork.Booking.GetAll(b => b.Status == SD.StatusApproved
+            || b.Status == SD.StatusCheckedIn).ToList();
+
+            foreach (var hotel in hotelList)
+            {
+                int roomsAvailable = SD.HotelRoomsAvailable_Count(hotel.Id, roomList, bookings, checkInDate, nights);
+                if (roomsAvailable == 0)
+                {
+                    hotel.IsAvailable = false;
+                }
+            }
+
+            return hotelList;
+
         }
 
         public Hotel GetHotelById(int id)

@@ -1,5 +1,7 @@
 using HBook.Application.Common.Interfaces;
 using HBook.Application.Common.Utility;
+using HBook.Application.Services.Impelementation;
+using HBook.Application.Services.Interface;
 using HBookWeb.Models;
 using HBookWeb.ViewModels;
 using Microsoft.AspNetCore.Mvc;
@@ -10,18 +12,20 @@ namespace HBookWeb.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IUnitOfWork _unitOfWork;
+        private readonly IHotelService _hotelService;
+        private readonly IRoomService _roomService;
         private readonly IWebHostEnvironment _webHostEnvironment;
-        public HomeController(IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment)
+        public HomeController(IHotelService hotelService,IRoomService roomService, IWebHostEnvironment webHostEnvironment)
         {
-            _unitOfWork = unitOfWork;
+            _hotelService = hotelService;
+            _roomService = roomService;
             _webHostEnvironment = webHostEnvironment;
         }
         public IActionResult Index()
         {
             HomeVM homeVM = new HomeVM()
             {
-                HotelList = _unitOfWork.Hotel.GetAll(includeproperties: "Amenities"),
+                HotelList = _hotelService.GetAllHotels(),
                 CheckInDate = DateOnly.FromDateTime(DateTime.Now),
                 CheckOutDate = DateOnly.FromDateTime(DateTime.Now.AddDays(1)),
                 Nights = 1
@@ -34,23 +38,10 @@ namespace HBookWeb.Controllers
         public IActionResult GetHotelByDate (int nights, DateOnly checkInDate)
         {
             //Thread.Sleep(250);
-            var hotelList = _unitOfWork.Hotel.GetAll(includeproperties: "Amenities").ToList();
-            var roomList = _unitOfWork.Room.GetAll().ToList();
-            var bookings = _unitOfWork.Booking.GetAll(b => b.Status == SD.StatusApproved 
-            || b.Status == SD.StatusCheckedIn).ToList();
-
-            foreach(var hotel in hotelList)
-            {
-                int roomsAvailable = SD.HotelRoomsAvailable_Count(hotel.Id, roomList, bookings, checkInDate, nights);
-                if (roomsAvailable == 0)
-                {
-                    hotel.IsAvailable = false;
-                }
-            }
-
+            
             HomeVM homeVM = new HomeVM()
             {
-                HotelList = hotelList,
+                HotelList = _hotelService.GetAvailableHotelsByDate(nights, checkInDate),
                 CheckInDate = checkInDate,
                 Nights = nights
             };
@@ -72,7 +63,7 @@ namespace HBookWeb.Controllers
         [HttpPost]
         public IActionResult GeneratePPTExport(int id)
         {
-            var hotelFromDb = _unitOfWork.Hotel.Get(h => h.Id == id, includeproperties: "Amenities");
+            var hotelFromDb = _hotelService.GetHotelById(id);
 
             if(hotelFromDb == null)
             {

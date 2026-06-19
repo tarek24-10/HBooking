@@ -12,5 +12,6 @@ namespace HBook.Application.Services.Interface
         void CreateHotel(Hotel hotel);
         void UpdateHotel(Hotel hotel);
         bool DeleteHotel(int id);
+        IEnumerable<Hotel> GetAvailableHotelsByDate(int nights, DateOnly checkInDate);
     }
 }
