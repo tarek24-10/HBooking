@@ -1,8 +1,10 @@
 using HBook.Application.Common.Interfaces;
+using HBook.Application.Contract;
 using HBook.Application.Services.Impelementation;
 using HBook.Application.Services.Interface;
 using HBook.Domain.Entities;
 using HBook.Infrastructure.Data;
+using HBook.Infrastructure.Emails;
 using HBook.Infrastructure.Repository;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -25,6 +27,7 @@ builder.Services.AddScoped<IDbInitializer, DbInitializer>();
 builder.Services.AddScoped<IHotelService, HotelService>();
 builder.Services.AddScoped<IRoomService, RoomService>();
 builder.Services.AddScoped<IBookingService, BookingService>();
+builder.Services.AddScoped<IEmailService, EmailService>();
 
 
 //builder.Services.ConfigureApplicationCookie(options =>
