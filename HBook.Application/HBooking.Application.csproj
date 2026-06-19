@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\HBook.Domain\HBook.Domain.csproj" />
+    <ProjectReference Include="..\HBook.Domain\HBooking.Domain.csproj" />
   </ItemGroup>
 
 </Project>

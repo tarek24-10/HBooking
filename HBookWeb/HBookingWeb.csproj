@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\HBook.Infrastructure\HBook.Infrastructure.csproj" />
+    <ProjectReference Include="..\HBook.Infrastructure\HBooking.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>

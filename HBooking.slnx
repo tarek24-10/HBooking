@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="HBook.Application/HBooking.Application.csproj" Id="0d1f0f74-ade0-4d2d-ae6b-ab84e8db830f" />
+  <Project Path="HBook.Domain/HBooking.Domain.csproj" Id="c0eeaf8c-312d-43a5-ae1e-77f7f17f52f1" />
+  <Project Path="HBook.Infrastructure/HBooking.Infrastructure.csproj" Id="651e7ec7-9840-4746-9999-ed7d30bed5cf" />
+  <Project Path="HBookWeb/HBookingWeb.csproj" />
+</Solution>
