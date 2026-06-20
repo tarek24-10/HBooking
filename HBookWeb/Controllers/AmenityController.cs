@@ -17,6 +17,7 @@ namespace HBookWeb.Controllers
         public AmenityController(IAmenityService amenityService, IHotelService hotelService)
         {
             _hotelService = hotelService;
+            _amenityService = amenityService;
         }
 
         public IActionResult Index()

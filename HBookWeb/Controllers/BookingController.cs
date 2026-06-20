@@ -23,12 +23,13 @@ namespace HBookWeb.Controllers
         private readonly IBookingService _bookingService;
         private readonly IHotelService _hotelService;
         private readonly IRoomService _roomService;
+        private readonly IAmenityService _amenityService;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IEmailService _emailService;
         public BookingController(IBookingService bookingService, IHotelService hotelService,
             IRoomService roomService, IWebHostEnvironment webHostEnvironment,
-            UserManager<ApplicationUser> userManager, IEmailService emailService)
+            UserManager<ApplicationUser> userManager, IEmailService emailService, IAmenityService amenityService)
         {
             _bookingService = bookingService;
             _hotelService = hotelService;
@@ -36,6 +37,7 @@ namespace HBookWeb.Controllers
             _webHostEnvironment = webHostEnvironment;
             _userManager = userManager;
             _emailService = emailService;
+            _amenityService = amenityService;
         }
 
         [Authorize]
@@ -48,6 +50,7 @@ namespace HBookWeb.Controllers
         public IActionResult BookingDetails(int bookingId)
         {
             var booking = _bookingService.GetBookingById(bookingId);
+            booking.Hotel.Amenities = _amenityService.GetAllAmenities().Where(a => a.HotelId == booking.HotelId).ToList();
             if (booking.RoomNumber == 0 && booking.Status == SD.StatusApproved)
             {
                 var availableRoomNumbers = GetAvailableRoomNumbersINHotel(booking.HotelId);
