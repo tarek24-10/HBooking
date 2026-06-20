@@ -48,7 +48,6 @@ namespace HBookWeb.Controllers
         public IActionResult BookingDetails(int bookingId)
         {
             var booking = _bookingService.GetBookingById(bookingId);
-            booking.Hotel = _hotelService.GetHotelById(booking.HotelId);
             if (booking.RoomNumber == 0 && booking.Status == SD.StatusApproved)
             {
                 var availableRoomNumbers = GetAvailableRoomNumbersINHotel(booking.HotelId);

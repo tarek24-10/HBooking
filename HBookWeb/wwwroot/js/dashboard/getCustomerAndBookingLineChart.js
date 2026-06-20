@@ -22,7 +22,7 @@ function loadCustomerAndBookingLineChart() {
 }
 
 function loadLineChart(id, data) {
-    var chartColors = getCharColorsArray(id);
+    var chartColors = getChartColorsArray(id);
     options = {
         colors: chartColors,
         series: data.series,

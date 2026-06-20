@@ -12,9 +12,9 @@ namespace HBook.Application.Services.Impelementation
             _unitOfWork = unitOfWork;
         }
 
-        public bool CheckRoomExists(int id)
+        public bool CheckRoomExists(int roomNumber, int hotelId)
         {
-            return _unitOfWork.Room.Any(r => r.Id == id);
+            return _unitOfWork.Room.Any(r => r.RoomNumber == roomNumber && r.HotelId == hotelId);
         }
 
         public void CreateRoom(Room room)

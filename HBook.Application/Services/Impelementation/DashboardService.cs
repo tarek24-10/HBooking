@@ -9,7 +9,8 @@ namespace HBook.Application.Services.Impelementation
     {
         private readonly IUnitOfWork _unitOfWork;
         private static int previousMonth = DateTime.Now.Month == 1 ? 12 : DateTime.Now.Month - 1;
-        private readonly DateTime previousMonthStartDate = new(DateTime.Now.Year, previousMonth, 1);
+        private static int previousMonthYear = DateTime.Now.Month == 1 ? DateTime.Now.Year - 1 : DateTime.Now.Year;
+        private readonly DateTime previousMonthStartDate = new(previousMonthYear, previousMonth, 1);
         private readonly DateTime CurrentMonthStartDate = new(DateTime.Now.Year, DateTime.Now.Month, 1);
 
         public DashboardService(IUnitOfWork unitOfWork)
@@ -22,7 +23,7 @@ namespace HBook.Application.Services.Impelementation
             var totalBookings = _unitOfWork.Booking.GetAll(b => b.BookingDate >= DateTime.Now.AddDays(-30)
             && (b.Status != SD.StatusCancelled || b.Status != SD.StatusPending));
 
-            var customerWithOneBooking = totalBookings.GroupBy(b => b.UserId).Where(x => x.Count() == 1).Select(x => x.Key).ToList();
+            var customerWithOneBooking = totalBookings.GroupBy(b => b.UserId).Where(g => g.Count() == 1).Select(g => g.Key).ToList();
 
             int bookingsByNewCustomers = customerWithOneBooking.Count();
 
@@ -41,10 +42,10 @@ namespace HBook.Application.Services.Impelementation
         {
             var bookingData = _unitOfWork.Booking.GetAll(b => b.BookingDate >= DateTime.Now.AddDays(-30)
            && (b.Status != SD.StatusCancelled || b.Status != SD.StatusPending))
-           .GroupBy(b => b.BookingDate.Date).Select(u => new { DateTime = u.Key, NewBookingCount = u.Count() });
+           .GroupBy(b => b.BookingDate.Date).Select(g => new { DateTime = g.Key, NewBookingCount = g.Count() });
 
             var CustomerData = _unitOfWork.ApplicationUser.GetAll(u => u.CreatedAt >= DateTime.Now.AddDays(-30))
-            .GroupBy(u => u.CreatedAt.Date).Select(u => new { DateTime = u.Key, NewCustomerCount = u.Count() });
+            .GroupBy(u => u.CreatedAt.Date).Select(g => new { DateTime = g.Key, NewCustomerCount = g.Count() });
 
             var leftJoin = bookingData.GroupJoin(CustomerData, b => b.DateTime, c => c.DateTime,
                 (b, c) => new

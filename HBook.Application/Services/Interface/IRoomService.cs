@@ -9,6 +9,6 @@ namespace HBook.Application.Services.Interface
         void CreateRoom(Room room);
         void UpdateRoom(Room room);
         bool DeleteRoom(int id);
-        bool CheckRoomExists(int id);
+        bool CheckRoomExists(int roomNumber, int hotelId);
     }
 }

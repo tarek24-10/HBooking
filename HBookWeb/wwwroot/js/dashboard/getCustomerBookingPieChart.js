@@ -22,7 +22,7 @@ function loadCustomerBookingPieChart() {
 }
 
 function loadPieChart(id,data) {
-    var chartColors = getCharColorsArray(id);
+    var chartColors = getChartColorsArray(id);
 
     options = {
         series: data.series,

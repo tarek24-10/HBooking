@@ -1,5 +1,5 @@
 ﻿function loadRadialBarChart(id, data) {
-    var chartColors = getCharColorsArray(id);
+    var chartColors = getChartColorsArray(id);
     var options = {
         fill: {
             colors: chartColors,
@@ -34,7 +34,7 @@
 }
 
 
-function getCharColorsArray(id) {
+function getChartColorsArray(id) {
     if (document.getElementById(id) != null) {
         var colors = document.getElementById(id).getAttribute("data-colors");
 
@@ -45,7 +45,7 @@ function getCharColorsArray(id) {
                 if (newValue.indexOf(",") === -1) {
                     var color = getComputedStyle(document.documentElement).getPropertyValue(newValue);
                     if (color) return color;
-                    else return newValue;;
+                    else return newValue;
                 }
             });
         }

@@ -48,7 +48,7 @@ namespace HBookWeb.Controllers
         [HttpPost]
         public IActionResult Create(RoomVM roomVM)
         {
-            bool isRoomNumderExist = _roomService.CheckRoomExists(roomVM.Room.Id);
+            bool isRoomNumderExist = _roomService.CheckRoomExists(roomVM.Room.RoomNumber, roomVM.Room.HotelId);
             //ModelState.Remove("Hotel");
 
             if (ModelState.IsValid && !isRoomNumderExist)
