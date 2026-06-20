@@ -6,6 +6,10 @@ $(document).ready(function () {
     loadDataatble(status);
 });
 function loadDataatble(status) {
+    if (status === null) {
+        status = "";
+    }
+
     $("#tblBookings").DataTable({
         "ajax": {
             "url": "/Booking/GetAll?status=" + status
