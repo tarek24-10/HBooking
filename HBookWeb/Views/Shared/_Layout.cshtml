@@ -35,6 +35,10 @@
                                 <a class="nav-link" asp-controller="Booking" asp-action="Index">Manage Bookings</a>
                             </li>
                         </ul> 
+                    <div class="form-check form-switch form-check-reverse mt-2">
+                        <label class="form-check-label" for="switchCheckDefault">Switch to dark mode</label>
+                        <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault" onclick="toggleTheme()">
+                    </div>
                     <partial name="_LoginPartial"></partial>
                 </div>
             </div>
@@ -62,5 +66,18 @@
         @* <script src="jquery-ajax-unobtrusive\dist\jquery.unobtrusive-ajax.min.js"></script> *@
 
         @await RenderSectionAsync("Scripts", required: false)
+
+            <script>
+                function toggleTheme() {
+                const html = document.documentElement;
+
+                if (html.getAttribute("data-bs-theme") === "dark") {
+                html.setAttribute("data-bs-theme", "light");
+                }
+                else {
+                html.setAttribute("data-bs-theme", "dark");
+                }
+                }
+            </script>
     </body>
 </html>
