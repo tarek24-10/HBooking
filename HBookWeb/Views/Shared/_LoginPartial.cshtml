@@ -5,6 +5,10 @@
 <ul class="navbar-nav">
     @if (SignInManager.IsSignedIn(User))
     {
+        <div class="form-check form-switch form-check-reverse mt-2">
+            <label class="form-check-label" for="switchCheckDefault">Switch to dark mode</label>
+            <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault" onclick="toggleTheme()">
+        </div>
         <li class="nav-item">
             <a class="nav-link">Hello @UserManager.GetUserName(User)</a>
         </li>
@@ -14,6 +18,10 @@
     }
     else
     {
+        <div class="form-check form-switch form-check-reverse mt-2">
+            <label class="form-check-label" for="switchCheckDefault">Switch to dark mode</label>
+            <input class="form-check-input" type="checkbox" role="switch" id="switchCheckDefault" onclick="toggleTheme()">
+        </div>
         <li class="nav-item">
             <a class="nav-link" asp-controller="Account" asp-action="Login">Login</a>
         </li>
@@ -22,3 +30,16 @@
         </li>
     }
 </ul>
+
+<script>
+        function toggleTheme() {
+        const html = document.documentElement;
+
+        if (html.getAttribute("data-bs-theme") === "dark") {
+            html.setAttribute("data-bs-theme", "light");
+        }
+        else {
+            html.setAttribute("data-bs-theme", "dark");
+        }
+    }
+</script>
