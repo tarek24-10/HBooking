@@ -17,7 +17,7 @@ namespace HBook.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.8")
+                .HasAnnotation("ProductVersion", "10.0.13")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -50,23 +50,86 @@ namespace HBook.Infrastructure.Migrations
                         new
                         {
                             Id = 1,
-                            Description = "High-speed wireless internet access",
+                            Description = "Heated outdoor pool overlooking the beach.",
                             HotelId = 1,
-                            Name = "Free Wi-Fi"
+                            Name = "Oceanfront Pool"
                         },
                         new
                         {
                             Id = 2,
-                            Description = "Complimentary continental breakfast",
-                            HotelId = 2,
-                            Name = "Breakfast"
+                            Description = "Massage, sauna, and wellness treatments.",
+                            HotelId = 1,
+                            Name = "Full-Service Spa"
                         },
                         new
                         {
                             Id = 3,
-                            Description = "Free on-site parking",
+                            Description = "Fast wireless internet throughout the property.",
+                            HotelId = 1,
+                            Name = "Complimentary Wi-Fi"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Description = "24-hour workspace with printing and meeting support.",
+                            HotelId = 2,
+                            Name = "Business Center"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Description = "Convenient valet service for hotel guests.",
+                            HotelId = 2,
+                            Name = "Valet Parking"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Description = "City views with drinks and light bites.",
+                            HotelId = 2,
+                            Name = "Rooftop Lounge"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Description = "Cozy shared lounge for relaxing after a day outdoors.",
                             HotelId = 3,
-                            Name = "Parking"
+                            Name = "Fireplace Lounge"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            Description = "Secure equipment storage for winter guests.",
+                            HotelId = 3,
+                            Name = "Ski Storage"
+                        },
+                        new
+                        {
+                            Id = 9,
+                            Description = "Hot breakfast served daily with local favorites.",
+                            HotelId = 3,
+                            Name = "Mountain Breakfast"
+                        },
+                        new
+                        {
+                            Id = 10,
+                            Description = "Direct access to the private beach area.",
+                            HotelId = 4,
+                            Name = "Beach Access"
+                        },
+                        new
+                        {
+                            Id = 11,
+                            Description = "Scheduled shuttle service for arrivals and departures.",
+                            HotelId = 4,
+                            Name = "Airport Shuttle"
+                        },
+                        new
+                        {
+                            Id = 12,
+                            Description = "Separate pool area for family-friendly relaxation.",
+                            HotelId = 4,
+                            Name = "Family Pool"
                         });
                 });
 
@@ -259,37 +322,49 @@ namespace HBook.Infrastructure.Migrations
                         {
                             Id = 1,
                             CreatedDate = new DateTime(2024, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "Comfortable seaside rooms with modern amenities.",
-                            ImageUrl = "https://images.unsplash.com/photo-1501117716987-c8e79b4e59f3",
+                            Description = "A beachfront resort with ocean-view suites, a full-service spa, and relaxed dining.",
+                            ImageUrl = "https://images.unsplash.com/photo-1501117716987-c8e79b4e59f3?auto=format&fit=crop&w=1200&q=80",
                             ModifiedDate = new DateTime(2024, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "SeaView Resort",
+                            Name = "Seaview Resort & Spa",
                             Occupancy = 2,
-                            Price = 199.99000000000001,
-                            Sqft = 420
+                            Price = 259.0,
+                            Sqft = 460
                         },
                         new
                         {
                             Id = 2,
                             CreatedDate = new DateTime(2024, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "Cozy lodge located in the heart of the mountains.",
-                            ImageUrl = "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb",
+                            Description = "A modern city-center hotel with business amenities, an elegant lobby, and easy access to attractions.",
+                            ImageUrl = "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=80",
                             ModifiedDate = new DateTime(2024, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "Mountain Lodge",
-                            Occupancy = 3,
-                            Price = 149.5,
-                            Sqft = 360
+                            Name = "Grand Meridian Hotel",
+                            Occupancy = 2,
+                            Price = 189.0,
+                            Sqft = 410
                         },
                         new
                         {
                             Id = 3,
                             CreatedDate = new DateTime(2024, 4, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Description = "Modern hotel in the city center close to attractions.",
-                            ImageUrl = "https://images.unsplash.com/photo-1505691723518-36a3ad12d0a6",
+                            Description = "A quiet mountain retreat with warm interiors, scenic views, and cozy guest rooms.",
+                            ImageUrl = "https://images.unsplash.com/photo-1500048993953-d23a436266cf?auto=format&fit=crop&w=1200&q=80",
                             ModifiedDate = new DateTime(2024, 4, 20, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "City Central Hotel",
-                            Occupancy = 2,
-                            Price = 179.0,
-                            Sqft = 400
+                            Name = "Alpine Crest Lodge",
+                            Occupancy = 3,
+                            Price = 169.0,
+                            Sqft = 380
+                        },
+                        new
+                        {
+                            Id = 4,
+                            CreatedDate = new DateTime(2024, 3, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Description = "A tropical stay with spacious suites, poolside lounging, and easy beach access.",
+                            ImageUrl = "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80",
+                            ModifiedDate = new DateTime(2024, 3, 28, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Name = "Palm Harbor Suites",
+                            Occupancy = 4,
+                            Price = 219.0,
+                            Sqft = 435
                         });
                 });
 
@@ -322,21 +397,56 @@ namespace HBook.Infrastructure.Migrations
                             Id = 1,
                             HotelId = 1,
                             RoomNumber = 101,
-                            SpecialDetails = "Sea view, king bed"
+                            SpecialDetails = "Ocean view, king bed, balcony"
                         },
                         new
                         {
                             Id = 2,
                             HotelId = 1,
                             RoomNumber = 102,
-                            SpecialDetails = "Balcony, double bed"
+                            SpecialDetails = "Partial sea view, two queen beds"
                         },
                         new
                         {
                             Id = 3,
                             HotelId = 2,
                             RoomNumber = 201,
-                            SpecialDetails = "Mountain view, fireplace"
+                            SpecialDetails = "City view, king bed, work desk"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            HotelId = 2,
+                            RoomNumber = 202,
+                            SpecialDetails = "City view, two double beds"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            HotelId = 3,
+                            RoomNumber = 301,
+                            SpecialDetails = "Mountain view, fireplace, king bed"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            HotelId = 3,
+                            RoomNumber = 302,
+                            SpecialDetails = "Forest view, queen bed, reading nook"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            HotelId = 4,
+                            RoomNumber = 401,
+                            SpecialDetails = "Pool view, king bed, private balcony"
+                        },
+                        new
+                        {
+                            Id = 8,
+                            HotelId = 4,
+                            RoomNumber = 402,
+                            SpecialDetails = "Garden view, two queen beds"
                         });
                 });
 

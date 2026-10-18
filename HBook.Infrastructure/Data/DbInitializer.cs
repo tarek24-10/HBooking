@@ -59,21 +59,53 @@ namespace HBook.Infrastructure.Data
             if (_context.Hotels.Any())
                 return;
 
-            //-----------------------------------
-            // Hotels
-            //-----------------------------------
-            var hotelFaker = new Faker<Hotel>()
-                .RuleFor(h => h.Name, f => $"{f.Company.CompanyName()} Hotel")
-                .RuleFor(h => h.Description, f => f.Lorem.Sentence())
-                .RuleFor(h => h.Price, f => f.Random.Double(100, 500))
-                .RuleFor(h => h.Sqft, f => f.Random.Int(500, 1500))
-                .RuleFor(h => h.Occupancy, f => f.Random.Int(1, 5))
-                .RuleFor(h => h.ImageUrl,
-                    f => $"https://picsum.photos/seed/{f.Random.Int(1, 1000)}/800/500")
-                .RuleFor(h => h.CreatedDate, f => DateTime.Now)
-                .RuleFor(h => h.ModifiedDate, f => DateTime.Now);
-
-            var hotels = hotelFaker.Generate(3);
+            var hotels = new List<Hotel>
+            {
+                new()
+                {
+                    Name = "Seaview Resort & Spa",
+                    Description = "A beachfront resort with ocean-view suites, a spa, and relaxed dining.",
+                    Price = 259.00,
+                    Sqft = 460,
+                    Occupancy = 2,
+                    ImageUrl = "https://images.unsplash.com/photo-1501117716987-c8e79b4e59f3?auto=format&fit=crop&w=1200&q=80",
+                    CreatedDate = DateTime.Now,
+                    ModifiedDate = DateTime.Now
+                },
+                new()
+                {
+                    Name = "Grand Meridian Hotel",
+                    Description = "A modern city-center hotel with business amenities and an elegant lobby.",
+                    Price = 189.00,
+                    Sqft = 410,
+                    Occupancy = 2,
+                    ImageUrl = "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=80",
+                    CreatedDate = DateTime.Now,
+                    ModifiedDate = DateTime.Now
+                },
+                new()
+                {
+                    Name = "Alpine Crest Lodge",
+                    Description = "A quiet mountain retreat with warm interiors and scenic views.",
+                    Price = 169.00,
+                    Sqft = 380,
+                    Occupancy = 3,
+                    ImageUrl = "https://images.unsplash.com/photo-1500048993953-d23a436266cf?auto=format&fit=crop&w=1200&q=80",
+                    CreatedDate = DateTime.Now,
+                    ModifiedDate = DateTime.Now
+                },
+                new()
+                {
+                    Name = "Palm Harbor Suites",
+                    Description = "A tropical stay with spacious suites, poolside lounging, and beach access.",
+                    Price = 219.00,
+                    Sqft = 435,
+                    Occupancy = 4,
+                    ImageUrl = "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80",
+                    CreatedDate = DateTime.Now,
+                    ModifiedDate = DateTime.Now
+                }
+            };
 
             _context.Hotels.AddRange(hotels);
             _context.SaveChanges();
@@ -85,11 +117,11 @@ namespace HBook.Infrastructure.Data
             var roomFaker = new Faker<Room>()
                 .RuleFor(r => r.SpecialDetails,
                     f => f.PickRandom(
-                        "Sea View",
-                        "King Bed",
-                        "Balcony",
-                        "Mini Bar",
-                        "Free Breakfast"));
+                        "Ocean view, king bed, balcony",
+                        "City view, work desk, king bed",
+                        "Mountain view, fireplace, king bed",
+                        "Pool view, private balcony, two queen beds",
+                        "Family suite, sitting area, mini fridge"));
 
             var rooms = new List<Room>();
 

@@ -32,7 +32,7 @@
                         {
                             @if (hotel.IsAvailable)
                             {
-                                        <a asp-controller="Booking" asp-action="FinalizeBooking" asp-route-HotelId="@hotel.Id" asp-route-CheckIn="@Model.CheckInDate.ToString("yyyy-MM-dd")" asp-route-Nights="@Model.Nights" class="btn btn-success form-control btn-block">
+                                <a asp-controller="Booking" asp-action="FinalizeBooking" asp-route-HotelId="@hotel.Id" asp-route-CheckIn="@Model.CheckInDate.ToString("yyyy-MM-dd")" asp-route-Nights="@Model.Nights" class="btn btn-success form-control btn-block">
                                     Book
                                 </a>
                             }
@@ -111,7 +111,7 @@
                     <div class="modal-footer">
                          <button asp-controller="Home" asp-action="GeneratePPTExport" 
                                         asp-route-id="@hotel.Id" type="submit" class="btn btn-outline-warning">
-                                    <i class="bi bi-file-earmark-ppt">Download Hotel PPT </i>
+                                    <i class="bi bi-file-earmark-ppt">Download Hotel PPT</i>
                                     </button>
                         <button type="button" class="btn btn-outline-danger" data-bs-dismiss="modal">Close</button>
                     </div>
