@@ -18,7 +18,28 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+  margin-bottom: 0;
+}
+
+.navbar .navbar-collapse {
+  width: 100%;
+}
+
+.navbar .navbar-nav {
+  flex-wrap: wrap;
+}
+
+.navbar .form-check-label {
+  white-space: nowrap;
+}
+
+@media (max-width: 991.98px) {
+  .navbar .navbar-collapse {
+    padding-top: 1rem;
+  }
 }
 
 .form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
