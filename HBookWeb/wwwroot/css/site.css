@@ -18,7 +18,52 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+  margin-bottom: 0;
+}
+
+.navbar .navbar-collapse {
+  width: 100%;
+}
+
+.navbar .navbar-nav {
+  flex-wrap: wrap;
+}
+
+.navbar .nav-link,
+.navbar .dropdown-item {
+  white-space: nowrap;
+}
+
+.navbar .form-check-label {
+  white-space: nowrap;
+}
+
+.sidebar {
+  background-color: var(--bs-body-bg);
+}
+
+.sidebar .nav-link {
+  border-radius: .5rem;
+  padding: .5rem .75rem;
+}
+
+.sidebar .nav-link:hover,
+.sidebar .nav-link:focus,
+.sidebar .nav-link.active {
+  background-color: rgba(var(--bs-success-rgb), .08);
+}
+
+@media (max-width: 991.98px) {
+  .navbar .navbar-collapse {
+    padding-top: 1rem;
+  }
+
+  .sidebar {
+    padding-top: .5rem;
+  }
 }
 
 .form-floating > .form-control-plaintext::placeholder, .form-floating > .form-control::placeholder {
