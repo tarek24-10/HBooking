@@ -17,8 +17,8 @@
 </head>
 <body class="d-flex flex-column min-vh-100">
     <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-body border-bottom shadow-sm">
-            <div class="container-fluid">
+        <nav class="navbar navbar-expand-lg navbar-light bg-body border-bottom shadow-sm py-2">
+            <div class="container-fluid px-3 px-lg-4">
                 <a class="navbar-brand d-flex align-items-center gap-2" asp-area="" asp-controller="Home" asp-action="Index">
                     <img src="~/images/OIP.webp" width="35" alt="HBook" />
                 </a>
@@ -47,7 +47,7 @@
         </nav>
     </header>
     <main role="main" class="flex-grow-1 py-3 py-lg-4">
-        <div class="container-fluid">
+        <div class="container-fluid px-3 px-lg-4">
             <div class="loading spinner" style="display:none">Loading</div>
             <partial name="_Notification"></partial>
             @RenderBody()
@@ -55,7 +55,7 @@
     </main>
 
     <footer class="border-top mt-auto py-3 text-muted">
-        <div class="container-fluid text-center">
+        <div class="container-fluid px-3 px-lg-4 text-center">
             &copy; 2026 - HBookWeb - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
